@@ -1,0 +1,11 @@
+const TYPES = {
+    dummyService: Symbol.for('dummyService'),
+    FSClient: Symbol.for('FSClient'),
+    FileSystemService: Symbol.for('FileSystemService'),
+    LogWritter: Symbol.for('LogWritter'),
+    ExpenseTrackerService: Symbol.for('ExpenseTrackerService'),
+    Utility: Symbol.for('Utility'),
+    AccountService: Symbol.for('AccountService')
+}
+
+export default TYPES;
