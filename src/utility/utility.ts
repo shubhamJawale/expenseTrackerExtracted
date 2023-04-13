@@ -8,4 +8,8 @@ export class Utility {
         let timeString = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} : ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
         return timeString;
     }
+
+    public async writeNotesOnScreen(message: string) {
+        console.log(`[${message.toLocaleUpperCase()}]`)
+    }
 }

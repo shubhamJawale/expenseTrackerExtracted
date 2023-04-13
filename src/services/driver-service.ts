@@ -1,4 +1,6 @@
+import { injectable } from "inversify";
 
+@injectable()
 export class DriverService {
     constructor() { }
     public takeInput(readline: any) {
@@ -6,11 +8,15 @@ export class DriverService {
             input: process.stdin,
             output: process.stdout
         });
+
         return rl;
+
     }
     public createPrompt(readline: any) {
         const prompt = (query: any) => new Promise((resolve) => readline.question(query, resolve));
         return prompt;
     }
+
+
 
 };

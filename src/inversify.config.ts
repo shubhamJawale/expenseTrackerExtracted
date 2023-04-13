@@ -8,6 +8,9 @@ import TYPES from "./types";
 import { LogWritter } from "./utility/logWritter";
 import { Utility } from "./utility/utility";
 import { AccountService } from "./services/account-service";
+import { ExpenseAppCLIService } from "./services/expense-app-cli-service";
+import { CommonService } from "./services/common-service";
+import { DriverService } from "./services/driver-service";
 
 const container = new Container();
 //container.bind<SERVICE>(TYPES.service).to(SERVICE).inSinglotonScope();
@@ -17,3 +20,6 @@ container.bind<LogWritter>(TYPES.LogWritter).to(LogWritter).inSingletonScope();
 container.bind<ExpenseTrackerService>(TYPES.ExpenseTrackerService).to(ExpenseTrackerService).inSingletonScope();
 container.bind<Utility>(TYPES.Utility).to(Utility).inSingletonScope();
 container.bind<AccountService>(TYPES.AccountService).to(AccountService).inSingletonScope();
+container.bind<ExpenseAppCLIService>(TYPES.ExpeneseAppCliService).to(ExpenseAppCLIService).inSingletonScope();
+container.bind<CommonService>(TYPES.CommonService).to(CommonService).inSingletonScope();
+container.bind<DriverService>(TYPES.DriverService).to(DriverService).inSingletonScope();

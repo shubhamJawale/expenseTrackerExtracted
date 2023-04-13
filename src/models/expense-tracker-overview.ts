@@ -1,15 +1,13 @@
 export class ExpenseTrackerOverview {
 
     private name: string;
-    private accountBalance: string;
+    private accountBalance: number;
     private totalExpenditureForMonth: number;
     private totalIncomeForMonth: number;
     private totalIncome: number;
     private totalExpenditure: number;
     private dateForRecords: string;
-
-
-    constructor(name: string, accountBalance: string, totalExpenditureForMonth: number, totalIncome: number, totalIncomeForMonth: number, totalExpenditure: number, dateForRecords: string) {
+    constructor(name: string, accountBalance: number, totalExpenditureForMonth: number, totalIncome: number, totalIncomeForMonth: number, totalExpenditure: number, dateForRecords: string) {
         this.name = name;
         this.accountBalance = accountBalance;
         this.totalExpenditureForMonth = totalExpenditureForMonth;
@@ -25,7 +23,7 @@ export class ExpenseTrackerOverview {
     public getName() {
         return this.name;
     }
-    public setaccountBalance(accountBalance: string) {
+    public setaccountBalance(accountBalance: number) {
         this.accountBalance = accountBalance;
     }
     public getaccountBalance() {

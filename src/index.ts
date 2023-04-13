@@ -11,6 +11,9 @@ import { CONSTANTS, fileTypes, transactionCategory, typeOfTransaction } from "./
 // temp imports
 import { Utility } from "./utility/utility";
 import { AccountService } from "./services/account-service";
+import { CommonService } from "./services/common-service";
+import { ExpenseAppCLIService } from "./services/expense-app-cli-service";
+import { Account } from "./models/account";
 let driverService = new DriverService();
 
 let readLine = driverService.takeInput(readline);
@@ -21,11 +24,20 @@ let logWritter = new LogWritter(fsClient, utility);
 let fileSystemService = new FileSystemService(fsClient, logWritter);
 let expense = new ExpenseTrackerService(fileSystemService, logWritter, utility);
 let account = new AccountService(fileSystemService, expense, utility, logWritter);
+let erxpenseappclientsvc = new ExpenseAppCLIService(account, driverService, expense, utility);
+let common = new CommonService(account, driverService, erxpenseappclientsvc);
 let printName = async () => {
     // let response = await expense.AddTransactionToAnOldAccount(1000, typeOfTransaction.income, transactionCategory.other, "test transacton", "testing", 'shubham')
     //await account.createDefaultAccountFiles('shubham');
-    let response = await account.createOrUpdateAccount("somnath", "my salaryAccount");
-    console.log(response);
+    //let response = await account.createOrUpdateAccount("somnath", "my salaryAccount");
+    // console.log(response);
+    common.getMainConsole();
+    // let rl = readline.createInterface({
+    //     input: process.stdin,
+    //     output: process.stdout
+    // });
+    // let account: Account = new Account('1', 'shubham', 'anything');
+    // erxpenseappclientsvc.AfterLogInMenu('shubham', rl, account)
 }
 
 printName();

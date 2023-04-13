@@ -23,12 +23,13 @@ export class ExpenseTrackerService {
     public async checkAccountExistsOrNot() { }
 
 
-    //two things will change first universal object 
+    //two things will change first universal object
     //second the csv file will add line to it
     public async AddTransactionToAnOldAccount(ammount: number, transactionType: string, transactionCategory: string, transactionDetails: string, transactionName: string, accountName: string) {
-        let jsonObject = await this.fetchJSONOrCSVFile(CONSTANTS.transctionObjectFileName, CONSTANTS.filePath, fileTypes.json);
+        let jsonObject = await this.fetchJSONOrCSVFile(`${accountName}_${CONSTANTS.transctionObjectFileName}`, CONSTANTS.filePath, fileTypes.json);
+        // console.log(jsonObject)
         let oldOverview = ExpenseTrackerOverview.fromJson(jsonObject);
-        console.log(oldOverview);
+        // console.log(oldOverview);
         let oldTotalIncome = oldOverview.gettotalIncome();
         let oldTotalIncomeForMonth = oldOverview.gettotalIncomeForMonth();
         let oldTotalExpenditure = oldOverview.gettotalExpenditure();
@@ -39,7 +40,7 @@ export class ExpenseTrackerService {
         let currentMonthFlag = await this.checkIsCurrentMonth(parseInt(oldRecordDate));
         oldOverview.SetDateForTheRecord((Date.now()).toString());
         if (transactionType == typeOfTransaction.expenditure) {
-            oldOverview.setaccountBalance((parseFloat(oldAccountBalance) - ammount).toString());
+            oldOverview.setaccountBalance(/* (parseFloat( */oldAccountBalance/* ) */ - ammount/* s */);
             oldOverview.settotalExpenditure(oldTotalExpenditure + ammount);
             if (currentMonthFlag) {
                 oldOverview.settotalExpenditureForMonth(oldTotalExpenditureForMOnth + ammount);
@@ -47,7 +48,7 @@ export class ExpenseTrackerService {
                 oldOverview.settotalExpenditureForMonth(ammount);
             }
         } else {
-            oldOverview.setaccountBalance((parseFloat(oldAccountBalance) + ammount).toString());
+            oldOverview.setaccountBalance(/* (parseFloat( */oldAccountBalance/* ) */ + ammount)/* .toString() )*/;
             oldOverview.settotalIncome(oldTotalIncome + ammount);
             if (currentMonthFlag) {
                 oldOverview.settotalIncomeForMonth(oldTotalIncomeForMonth + ammount);
@@ -56,8 +57,8 @@ export class ExpenseTrackerService {
             }
         }
 
-        let newTransactionRow = new ExpeneseDetailsCsvRow(uuid(), transactionName, transactionDetails, ammount.toString(), oldOverview.getaccountBalance(), transactionCategory, transactionType, await this.utility.convertTimeStamp(Date.now()));
-
+        let newTransactionRow = new ExpeneseDetailsCsvRow(uuid(), transactionName, transactionDetails, ammount.toString(), oldOverview.getaccountBalance().toString(), transactionCategory, transactionType, await this.utility.convertTimeStamp(Date.now()));
+        // console.log(newTransactionRow)
         let responseToUpdateOverview = this.AddAccountOrUpdateAccount(oldOverview, accountName);
         let responseToSaveTransaction = this.addTransactionToCSV(newTransactionRow, accountName);
         return appStatusCodes.success;

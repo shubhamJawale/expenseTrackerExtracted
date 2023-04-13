@@ -5,7 +5,10 @@ const TYPES = {
     LogWritter: Symbol.for('LogWritter'),
     ExpenseTrackerService: Symbol.for('ExpenseTrackerService'),
     Utility: Symbol.for('Utility'),
-    AccountService: Symbol.for('AccountService')
+    AccountService: Symbol.for('AccountService'),
+    ExpeneseAppCliService: Symbol.for('ExpenseAppCLIService'),
+    CommonService: Symbol.for('CommonService'),
+    DriverService: Symbol.for('DriverService')
 }
 
 export default TYPES;

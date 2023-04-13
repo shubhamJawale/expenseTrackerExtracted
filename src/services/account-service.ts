@@ -35,6 +35,9 @@ export class AccountService {
         }
     }
 
+    public async getAccountBalance(name: any) {
+
+    }
     public async deleteAccount(name: string) {
         const accountPath = CONSTANTS.filePath + CONSTANTS.accountPath;
         let fetchAccountList = await this.fetchAccountList();
@@ -53,7 +56,15 @@ export class AccountService {
     public async fetchAccountList() {
         const accountPath = CONSTANTS.filePath + CONSTANTS.accountPath;
         let accountListJson = await this.fileSystemService.getJsonFromFile(CONSTANTS.accountFileName, accountPath);
+        // console.log(accountListJson);
         let AccountObjectList = Account.fetchListObjectOfAccounts(accountListJson);
+        return AccountObjectList;
+    }
+    public async fetchSapcificAccountDetails(name: any) {
+        const accountPath = CONSTANTS.filePath;
+        let accountListJson = await this.fileSystemService.getJsonFromFile(`${name}_${CONSTANTS.transctionObjectFileName}`, accountPath);
+        // console.log(accountListJson);
+        let AccountObjectList = ExpenseTrackerOverview.fromJson(accountListJson);
         return AccountObjectList;
     }
     public async createOrUpdateAccount(name: string, details?: string, newName?: string) {
@@ -112,7 +123,7 @@ export class AccountService {
         }
     }
     public async createDefaultAccountFiles(name: string) {
-        let expenseDetailsOverview = new ExpenseTrackerOverview(name, "0", 0, 0, 0, 0, (Date.now().toString()))
+        let expenseDetailsOverview = new ExpenseTrackerOverview(name, 0, 0, 0, 0, 0, (Date.now().toString()))
         await this.expenseTrackerService.AddAccountOrUpdateAccount(expenseDetailsOverview, name);
         let expenseTrackerCsvRow = new ExpeneseDetailsCsvRow(uuid(), "Opening Transaction", "Accont Opened", "0", "0", transactionCategory.other, typeOfTransaction.income, await this.utility.convertTimeStamp((Date.now())))
         await this.expenseTrackerService.addTransactionToCSV(expenseTrackerCsvRow, name);
