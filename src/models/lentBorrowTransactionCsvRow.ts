@@ -3,14 +3,14 @@ export class LentBorrowTransactionCsvRow {
     private type: string
     private ammount: number
     private date: string
-    // private status: string
+    private details: string
 
-    constructor(name: string, type: string, ammount: number, date: string, /* status: string */) {
+    constructor(name: string, type: string, ammount: number, date: string, details: string) {
         this.name = name
         this.type = type
         this.ammount = ammount
         this.date = date
-        // this.status = status
+        this.details = details
     }
     public getname() {
         return this.name
@@ -36,17 +36,17 @@ export class LentBorrowTransactionCsvRow {
     public setdate(date: string) {
         this.date = date;
     }
-    // public getstatus() {
-    //     return this.status
-    // }
-    // public setstatus(status: string) {
-    //     this.status = status;
-    // }
+    public getdetails() {
+        return this.details
+    }
+    public setdetails(details: string) {
+        this.details = details;
+    }
 
     public static fromJson(jsonArray: any[]) {
         let ArrayToReturn: LentBorrowTransactionCsvRow[] = [];
         for (let json of jsonArray) {
-            let singleElement = new LentBorrowTransactionCsvRow(json.name, json.type, json.ammount, json.date, /* json.status */);
+            let singleElement = new LentBorrowTransactionCsvRow(json.name, json.type, json.ammount, json.date, json.details);
             ArrayToReturn.push(singleElement);
         }
         return ArrayToReturn;

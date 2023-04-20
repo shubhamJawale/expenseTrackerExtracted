@@ -109,10 +109,10 @@ export class LentBorrowTrackingService {
     //update the transaction
     //show all transaction in the form of table
     // add progress --> task and moneyType --> for lent borrow constants
-    public async addOrUpdateLentBorrowAccount(name: string, accountName: string, type: string, ammount: number) {
+    public async addOrUpdateLentBorrowAccount(name: string, accountName: string, type: string, ammount: number, details: string) {
         // console.log('this method is called');
         let lentBorrowDetailsSingle = new LentBorrowTransaction(accountName, type, ammount);
-        let lentBorrowDetailsSingleCSVRow = new LentBorrowTransactionCsvRow(accountName, type, ammount, await this.utility.convertTimeStamp(Date.now()));
+        let lentBorrowDetailsSingleCSVRow = new LentBorrowTransactionCsvRow(accountName, type, ammount, await this.utility.convertTimeStamp(Date.now()), details);
         this.updateOrCreateLetBorrowAccountDetils(name, lentBorrowDetailsSingle, type);
         this.addTransactionToLentBorrowCsv(name, lentBorrowDetailsSingleCSVRow);
     }

@@ -137,7 +137,7 @@ export class AccountService {
         // await this.lentBorrowTransctionService.updateOrCreateLetBorrowAccountDetils(name, lentBorrowDetailsSingle, LentBorrowTransactionType.lent);
         // let lentBorrowTransactionCsvRow = new LentBorrowTransactionCsvRow(name, LentBorrowTransactionType.lent, 0, await this.utility.convertTimeStamp(Date.now()));
         // await this.lentBorrowTransctionService.addTransactionToLentBorrowCsv(name, lentBorrowTransactionCsvRow);
-        await this.lentBorrowTransctionService.addOrUpdateLentBorrowAccount(name, 'initial transction', LentBorrowTransactionType.lent, 0);
+        await this.lentBorrowTransctionService.addOrUpdateLentBorrowAccount(name, 'initial transction', LentBorrowTransactionType.lent, 0, "first empty Transaction");
     }
     public async checkAccountIfExists() {
         const accountPath = CONSTANTS.filePath + CONSTANTS.accountPath;

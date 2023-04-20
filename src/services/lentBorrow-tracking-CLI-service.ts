@@ -37,8 +37,10 @@ export class LentBorrowTrackingCLIService {
             // this is loop hole 
             selectedType = LentBorrowTransactionType.borrow;
         }
-        console.log(ammount);
-        let response = await this.lentBorrowTrackingService.addOrUpdateLentBorrowAccount(name, transaction.getname(), selectedType, parseInt(ammount));
+        // console.log(ammount);
+
+        let details = await rl.question('Enter the Transaction Details');
+        let response = await this.lentBorrowTrackingService.addOrUpdateLentBorrowAccount(name, transaction.getname(), selectedType, parseInt(ammount), details);
     }
 
     public async showLentBorrowMenu(rl: any, name: string) {
@@ -70,8 +72,8 @@ export class LentBorrowTrackingCLIService {
             selectedType = LentBorrowTransactionType.borrow;
         }
         let ammount = await rl.question('Enter the Ammount : ');
-
-        let response = await this.lentBorrowTrackingService.addOrUpdateLentBorrowAccount(name, accountName, selectedType, parseInt(ammount))
+        let details = await rl.question('Enter the Transaction Details');
+        let response = await this.lentBorrowTrackingService.addOrUpdateLentBorrowAccount(name, accountName, selectedType, parseInt(ammount), details)
     }
 
     public async showAllDetailsSummary(name: string) {
