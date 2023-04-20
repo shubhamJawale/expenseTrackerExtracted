@@ -14,6 +14,8 @@ import { AccountService } from "./services/account-service";
 import { CommonService } from "./services/common-service";
 import { ExpenseAppCLIService } from "./services/expense-app-cli-service";
 import { Account } from "./models/account";
+import { LentBorrowTrackingService } from "./services/lentBorrow-tracking-service";
+import { LentBorrowTrackingCLIService } from "./services/lentBorrow-tracking-CLI-service";
 let driverService = new DriverService();
 
 let readLine = driverService.takeInput(readline);
@@ -23,21 +25,24 @@ let utility = new Utility();
 let logWritter = new LogWritter(fsClient, utility);
 let fileSystemService = new FileSystemService(fsClient, logWritter);
 let expense = new ExpenseTrackerService(fileSystemService, logWritter, utility);
-let account = new AccountService(fileSystemService, expense, utility, logWritter);
-let erxpenseappclientsvc = new ExpenseAppCLIService(account, driverService, expense, utility);
+let lentBorrow = new LentBorrowTrackingService(fileSystemService, logWritter, utility);
+let lentBorrowCLI = new LentBorrowTrackingCLIService(lentBorrow);
+let account = new AccountService(fileSystemService, expense, utility, logWritter, lentBorrow);
+let erxpenseappclientsvc = new ExpenseAppCLIService(account, driverService, expense, utility, lentBorrowCLI);
 let common = new CommonService(account, driverService, erxpenseappclientsvc);
 let printName = async () => {
     // let response = await expense.AddTransactionToAnOldAccount(1000, typeOfTransaction.income, transactionCategory.other, "test transacton", "testing", 'shubham')
     //await account.createDefaultAccountFiles('shubham');
     //let response = await account.createOrUpdateAccount("somnath", "my salaryAccount");
     // console.log(response);
-    common.getMainConsole();
+    common.getMainConsole(); // this is main method
     // let rl = readline.createInterface({
     //     input: process.stdin,
     //     output: process.stdout
     // });
     // let account: Account = new Account('1', 'shubham', 'anything');
     // erxpenseappclientsvc.AfterLogInMenu('shubham', rl, account)
+
 }
 
 printName();

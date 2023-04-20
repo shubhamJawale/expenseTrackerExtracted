@@ -8,7 +8,9 @@ export let CONSTANTS = {
     csvFileName: "transactionDetails",
     transctionObjectFileName: "expenseDetailsOverview",
     accountPath: "Account/",
-    accountFileName: 'accountList'
+    accountFileName: 'accountList',
+    lentBorrowJsonFileName: 'LentBorrowDetails',
+    // lentBorrowJsonFilePath: './resources/files'
 
 }
 export let accountOperations = {
@@ -50,6 +52,17 @@ export const appStatusCodes = {
     'error': 500,
     'fileNotFound': 400,
     'fileAlreadyExsits': 424
+}
+export const LentBorrowTransactionType = {
+    lent: "Lent",
+    borrow: 'Borrow'
+}
+
+export const ColourForTransactionRow = {
+
+    red: 'red',
+    green: 'green',
+    yellow: 'yellow'
 }
 
 

@@ -1,18 +1,22 @@
+import { SubTask } from "./subTask"
+
 export class TaskObject {
     private id: number
     private name: string
     private description: string
     private startDate: string
     private dueDate: string
-    private subTaskList: string[]
+    private subTaskList: SubTask[]
+    private progress: string;
 
-    constructor(id: number, name: string, description: string, startDate: string, dueDate: string, subTaskList: string[]) {
+    constructor(id: number, name: string, description: string, startDate: string, dueDate: string, subTaskList: SubTask[], progress: string) {
         this.id = id
         this.name = name
         this.description = description
         this.startDate = startDate
         this.dueDate = dueDate
         this.subTaskList = subTaskList
+        this.progress = progress
     }
     public getid() {
         return this.id
@@ -47,7 +51,13 @@ export class TaskObject {
     public getsubTaskList() {
         return this.subTaskList
     }
-    public setsubTaskList(subTaskList: string[]) {
+    public setsubTaskList(subTaskList: SubTask[]) {
         this.subTaskList = subTaskList;
+    }
+    public getProgress() {
+        return this.progress;
+    }
+    public setProgress(progress: string) {
+        this.progress = progress;
     }
 }

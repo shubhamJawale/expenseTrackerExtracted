@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { accountOperations, appStatusCodes, CONSTANTS, filePrefix, fileTypes, transactionCategory, typeOfTransaction } from "../constants/constants";
+import { accountOperations, appStatusCodes, CONSTANTS, filePrefix, fileTypes, LentBorrowTransactionType, transactionCategory, typeOfTransaction } from "../constants/constants";
 import { Account } from "../models/account";
 import TYPES from "../types";
 import { FileSystemService } from "./file-system-service";
@@ -9,6 +9,9 @@ import { ExpenseTrackerOverview } from "../models/expense-tracker-overview";
 import { ExpeneseDetailsCsvRow } from "../models/expense-Details-csv-row";
 import { Utility } from "../utility/utility";
 import { LogWritter } from "../utility/logWritter";
+import { LentBorrowTransaction } from "../models/lentBorrowTransaction";
+import { LentBorrowTrackingService } from "./lentBorrow-tracking-service";
+import { LentBorrowTransactionCsvRow } from "../models/lentBorrowTransactionCsvRow";
 
 @injectable()
 export class AccountService {
@@ -17,7 +20,9 @@ export class AccountService {
     private readonly expenseTrackerService: ExpenseTrackerService;
     private readonly utility: Utility;
     private readonly logWritter: LogWritter;
-    constructor(@inject(TYPES.FileSystemService) _fileSystemService: FileSystemService, @inject(TYPES.ExpenseTrackerService) _expenseTrackerService: ExpenseTrackerService, @inject(TYPES.Utility) _utilty: Utility, @inject(TYPES.LogWritter) _logWritter: LogWritter) {
+    private readonly lentBorrowTransctionService: LentBorrowTrackingService;
+    constructor(@inject(TYPES.FileSystemService) _fileSystemService: FileSystemService, @inject(TYPES.ExpenseTrackerService) _expenseTrackerService: ExpenseTrackerService, @inject(TYPES.Utility) _utilty: Utility, @inject(TYPES.LogWritter) _logWritter: LogWritter, @inject(TYPES.LentBorrowTrackingService) _lentBorrowTransactionSetvice: LentBorrowTrackingService) {
+        this.lentBorrowTransctionService = _lentBorrowTransactionSetvice;
         this.logWritter = _logWritter;
         this.utility = _utilty;
         this.expenseTrackerService = _expenseTrackerService;
@@ -67,7 +72,7 @@ export class AccountService {
         let AccountObjectList = ExpenseTrackerOverview.fromJson(accountListJson);
         return AccountObjectList;
     }
-    public async createOrUpdateAccount(name: string, details?: string, newName?: string) {
+    public async createOrUpdateAccount(name: string, email: string, details?: string, /* newName?: string */) {
         const accountPath = CONSTANTS.filePath + CONSTANTS.accountPath;
         let jsonDataToWriteForAccountArray: Account[] = [];
         let message: string = "";
@@ -80,15 +85,16 @@ export class AccountService {
             let account = await this.fetchSpacificAccount(name, accountListObjectList);
             //accountListObjectList.find((accountElement: Account) => accountElement.getname() === name);
             if (account) {
-                let UpdatedAccount: Account = new Account("", "", "");
+                let UpdatedAccount: Account = new Account("", "", "", "");
                 let id = account.getid() ? account.getid() : "";
                 UpdatedAccount.setid(id);
                 if (details) {
                     UpdatedAccount.setdetails(details);
                 }
-                if (newName) {
-                    UpdatedAccount.setname(newName);
-                }
+                // if (newName) {
+                UpdatedAccount.setname(account.getname());
+                // }
+                UpdatedAccount.setEmail(email)
                 let indexOfAccount = accountListObjectList.indexOf(account);
                 if (indexOfAccount != -1) {
                     accountListObjectList[indexOfAccount] = UpdatedAccount;
@@ -99,7 +105,7 @@ export class AccountService {
                 this.logWritter.writeLogs('Account Updated ' + name, filePrefix.transction);
             } else {
                 details = details ? details : "new account created for " + name;
-                let account = new Account(uuid(), name, details);
+                let account = new Account(uuid(), name, details, email);
                 accountListObjectList.push(account);
                 jsonDataToWriteForAccountArray = accountListObjectList;
                 message = "Account Created";
@@ -109,7 +115,7 @@ export class AccountService {
             }
         } else {
             details = details ? details : "";
-            let account = new Account(uuid(), name, details);
+            let account = new Account(uuid(), name, details, email);
             jsonDataToWriteForAccountArray = [account];
             statusCode = appStatusCodes.success;
             message = "Account Created";
@@ -127,6 +133,11 @@ export class AccountService {
         await this.expenseTrackerService.AddAccountOrUpdateAccount(expenseDetailsOverview, name);
         let expenseTrackerCsvRow = new ExpeneseDetailsCsvRow(uuid(), "Opening Transaction", "Accont Opened", "0", "0", transactionCategory.other, typeOfTransaction.income, await this.utility.convertTimeStamp((Date.now())))
         await this.expenseTrackerService.addTransactionToCSV(expenseTrackerCsvRow, name);
+        // let lentBorrowDetailsSingle = new LentBorrowTransaction(name, LentBorrowTransactionType.lent, 0);
+        // await this.lentBorrowTransctionService.updateOrCreateLetBorrowAccountDetils(name, lentBorrowDetailsSingle, LentBorrowTransactionType.lent);
+        // let lentBorrowTransactionCsvRow = new LentBorrowTransactionCsvRow(name, LentBorrowTransactionType.lent, 0, await this.utility.convertTimeStamp(Date.now()));
+        // await this.lentBorrowTransctionService.addTransactionToLentBorrowCsv(name, lentBorrowTransactionCsvRow);
+        await this.lentBorrowTransctionService.addOrUpdateLentBorrowAccount(name, 'initial transction', LentBorrowTransactionType.lent, 0);
     }
     public async checkAccountIfExists() {
         const accountPath = CONSTANTS.filePath + CONSTANTS.accountPath;

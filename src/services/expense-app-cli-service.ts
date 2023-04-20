@@ -7,13 +7,16 @@ import * as readline from 'node:readline/promises';
 import { Account } from "../models/account";
 import { transactionCategory, typeOfTransaction } from "../constants/constants";
 import { Utility } from "../utility/utility";
+import { LentBorrowTrackingCLIService } from "./lentBorrow-tracking-CLI-service";
 @injectable()
 export class ExpenseAppCLIService {
     private readonly utility: Utility;
     private readonly accountService: AccountService;
     private readonly driverService: DriverService;
     private readonly expenseTrackerService: ExpenseTrackerService;
-    constructor(@inject(TYPES.AccountService) _accountService: AccountService, @inject(TYPES.DriverService) _driverService: DriverService, @inject(TYPES.ExpenseTrackerService) _expenseTrackerService: ExpenseTrackerService, @inject(TYPES.Utility) _utility: Utility) {
+    private readonly lentBorrowTransactionCLIService: LentBorrowTrackingCLIService;
+    constructor(@inject(TYPES.AccountService) _accountService: AccountService, @inject(TYPES.DriverService) _driverService: DriverService, @inject(TYPES.ExpenseTrackerService) _expenseTrackerService: ExpenseTrackerService, @inject(TYPES.Utility) _utility: Utility, @inject(TYPES.LentBorrowTrackingCLIService) _lentBorrowTransactionCLIService: LentBorrowTrackingCLIService) {
+        this.lentBorrowTransactionCLIService = _lentBorrowTransactionCLIService;
         this.accountService = _accountService;
         this.driverService = _driverService;
         this.expenseTrackerService = _expenseTrackerService;
@@ -77,9 +80,10 @@ export class ExpenseAppCLIService {
         this.utility.writeNotesOnScreen('After Entering option or answer please press space and then backspace')
         let accountName = await rl.question('Enter the Name ');
         let details = await rl.question('Enter the Details');
+        let email = await rl.question('Enter the Email')
         let account: Account | any;
         try {
-            account = await this.accountService.createOrUpdateAccount(accountName, details);
+            account = await this.accountService.createOrUpdateAccount(accountName, email, details);
             this.logIn(rl)
         } catch (e) {
             console.log("Error Occured");
@@ -93,6 +97,7 @@ export class ExpenseAppCLIService {
             console.log('2. see profile Data : ');
             console.log('3. update profile data : ');
             console.log('4. show Account Balance : ');
+            console.log('5. go to lent Borrow transaction');
             console.log('++++++++++++++++++++++++++++++++++++++++++++++++++');
             this.utility.writeNotesOnScreen('After Entering option or answer please press space and then backspace')
             let theOption = await rl.question('Choose The Option above  ');
@@ -115,6 +120,8 @@ export class ExpenseAppCLIService {
                     let accountJsonDetails = await this.accountService.fetchSapcificAccountDetails(accountName);
                     console.log(accountJsonDetails);
                     break;
+                case 5:
+                    let response = await this.lentBorrowTransactionCLIService.showLentBorrowMenu(rl, accountName);
             }
             choiseToQuite = await rl.question("DO YOU WANT TO QUITE (y/n) ?  : ")
         } while (choiseToQuite != "y")

@@ -8,7 +8,10 @@ const TYPES = {
     AccountService: Symbol.for('AccountService'),
     ExpeneseAppCliService: Symbol.for('ExpenseAppCLIService'),
     CommonService: Symbol.for('CommonService'),
-    DriverService: Symbol.for('DriverService')
+    DriverService: Symbol.for('DriverService'),
+    LentBorrowTrackingService: Symbol.for('LentBorrowTrackingService'),
+    LentBorrowTrackingCLIService: Symbol.for('LentBorrowTrackingCLIService'),
+
 }
 
 export default TYPES;
