@@ -77,7 +77,7 @@ export class FSClient implements IFsClient {
         }
     }
 
-    async checkFileExistsOrNot(fileName: string, filePath: string, fileFormat?: string): Promise<any> {
+    async checkFileExistsOrNot(fileName: string, filePath: string, fileFormat?: string): Promise<boolean> {
         let filePathUrl: string = "";
         if (fileFormat) {
             filePathUrl = `${filePath}${fileName}.${fileFormat}`;

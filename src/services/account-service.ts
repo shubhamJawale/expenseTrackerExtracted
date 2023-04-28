@@ -12,6 +12,7 @@ import { LogWritter } from "../utility/logWritter";
 import { LentBorrowTransaction } from "../models/lentBorrowTransaction";
 import { LentBorrowTrackingService } from "./lentBorrow-tracking-service";
 import { LentBorrowTransactionCsvRow } from "../models/lentBorrowTransactionCsvRow";
+import { TaskService } from "./task-services/task-service";
 
 @injectable()
 export class AccountService {
@@ -21,7 +22,9 @@ export class AccountService {
     private readonly utility: Utility;
     private readonly logWritter: LogWritter;
     private readonly lentBorrowTransctionService: LentBorrowTrackingService;
-    constructor(@inject(TYPES.FileSystemService) _fileSystemService: FileSystemService, @inject(TYPES.ExpenseTrackerService) _expenseTrackerService: ExpenseTrackerService, @inject(TYPES.Utility) _utilty: Utility, @inject(TYPES.LogWritter) _logWritter: LogWritter, @inject(TYPES.LentBorrowTrackingService) _lentBorrowTransactionSetvice: LentBorrowTrackingService) {
+    private readonly taskService : TaskService;
+    constructor(@inject(TYPES.FileSystemService) _fileSystemService: FileSystemService, @inject(TYPES.ExpenseTrackerService) _expenseTrackerService: ExpenseTrackerService, @inject(TYPES.Utility) _utilty: Utility, @inject(TYPES.LogWritter) _logWritter: LogWritter, @inject(TYPES.LentBorrowTrackingService) _lentBorrowTransactionSetvice: LentBorrowTrackingService, @inject(TYPES.TaskService) _taskService :TaskService) {
+        this.taskService = _taskService;
         this.lentBorrowTransctionService = _lentBorrowTransactionSetvice;
         this.logWritter = _logWritter;
         this.utility = _utilty;
@@ -138,6 +141,7 @@ export class AccountService {
         // let lentBorrowTransactionCsvRow = new LentBorrowTransactionCsvRow(name, LentBorrowTransactionType.lent, 0, await this.utility.convertTimeStamp(Date.now()));
         // await this.lentBorrowTransctionService.addTransactionToLentBorrowCsv(name, lentBorrowTransactionCsvRow);
         await this.lentBorrowTransctionService.addOrUpdateLentBorrowAccount(name, 'initial transction', LentBorrowTransactionType.lent, 0, "first empty Transaction");
+        await this.taskService.writeTaskJson(name, []);
     }
     public async checkAccountIfExists() {
         const accountPath = CONSTANTS.filePath + CONSTANTS.accountPath;

@@ -4,6 +4,7 @@ export let CONSTANTS = {
     loggerFilePath: "./resources/log/",
     loggerFileName: "logger",
     loggerFileExtension: "txt",
+
     filePath: "./resources/files/",
     csvFileName: "transactionDetails",
     transctionObjectFileName: "expenseDetailsOverview",
@@ -11,6 +12,8 @@ export let CONSTANTS = {
     accountFileName: 'accountList',
     lentBorrowJsonFileName: 'LentBorrowDetails',
     // lentBorrowJsonFilePath: './resources/files'
+    taskFilePath: './resources/files/tasks/',
+    taskFileName: 'taskFile'
 
 }
 export let accountOperations = {
@@ -44,7 +47,8 @@ export const typeOfTransaction = {
 
 export const filePrefix = {
     dev: "dev",
-    transction: "transaction"
+    transction: "transaction",
+    task: 'task'
 }
 
 export const appStatusCodes = {
@@ -63,6 +67,25 @@ export const ColourForTransactionRow = {
     red: 'red',
     green: 'green',
     yellow: 'yellow'
+}
+export const TaskProgresses = {
+    new :'new',
+    ready: 'Ready',
+    inProgress: 'InProgress',
+    extended: 'Extended',
+    terminated: 'Terminated',
+    completed: 'Completed'
+}
+export const subtasksProgresses = {
+    new :'new',
+    done: 'done',
+    inProgress: 'inprogress',
+    ready: 'ready'
+}
+export const subTaskPriority = {
+    low : "low",
+    mid : "mid",
+    high : "high"
 }
 
 

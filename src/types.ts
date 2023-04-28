@@ -11,7 +11,8 @@ const TYPES = {
     DriverService: Symbol.for('DriverService'),
     LentBorrowTrackingService: Symbol.for('LentBorrowTrackingService'),
     LentBorrowTrackingCLIService: Symbol.for('LentBorrowTrackingCLIService'),
-
+    TaskService: Symbol.for('TaskService'),
+    TaskServiceClient : Symbol.for('TaskServiceClient'),
 }
 
 export default TYPES;

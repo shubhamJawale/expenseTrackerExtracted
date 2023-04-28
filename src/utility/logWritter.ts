@@ -24,5 +24,15 @@ export class LogWritter {
             console.log("error while writting a log", e);
         }
     }
+    public async writeTasksLogs(data: string, filePrefix: string) {
+        try {
+            let timeStamp = Date.now();
+            let convertedTimeStamp = await this.utility.convertTimeStamp(timeStamp);
+            await this.fsClient.appendLineToFile(filePrefix + CONSTANTS.loggerFileName, CONSTANTS.loggerFilePath, `\n ${convertedTimeStamp}  : ${data}`, CONSTANTS.loggerFileExtension);
+            // console.log("logs written successfully");
+        } catch (e) {
+            console.log("error while writting a log", e);
+        }
+    }
 
 }

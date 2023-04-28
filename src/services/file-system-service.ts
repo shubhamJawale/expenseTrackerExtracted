@@ -51,7 +51,7 @@ export class FileSystemService {
         return response;
     }
     public async checkFileExists(fileName: any, filePath: any, fileFormat?: any) {
-        let fileCheckFlag: any;
+        let fileCheckFlag: boolean;
         if (fileFormat) {
             fileCheckFlag = await this.fsClient.checkFileExistsOrNot(fileName, filePath, fileFormat);
         } else {
