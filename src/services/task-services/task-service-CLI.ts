@@ -165,7 +165,7 @@ export class TaskServiceClient {
         let TaskMenuQuiteOption = 'n'
         do {
             taskTable.printTable();
-            let taskSwitchoption = await rl.question("choose the option to Perform the operation \n 1. Show Category wise Summary according To Progress \n 2. Enter into Task Window \n 3. add New Task");
+            let taskSwitchoption = await rl.question("choose the option to Perform the operation \n 1. Show Category wise Summary according To Progress \n 2. Enter into Task Window \n 3. add New Task : ");
 
             switch (parseInt(taskSwitchoption)) {
                 case 1:
@@ -229,7 +229,7 @@ export class TaskServiceClient {
                         case 3:
                             let progress = selectedTask.getProgress();
 
-                            let progressNumber = await rl.question('Enter The progress Of the Task  \n 1. ready \n 2. inProgress \n 3.extended \n  4.abandond \n  5.completed');
+                            let progressNumber = await rl.question('Enter The progress Of the Task  \n 1. ready \n 2. inProgress \n 3.extended \n  4.abandond \n  5.completed => ');
                             progress = this.setTaskProgress(parseInt(progressNumber));
                             // console.log(progress);
                             let updateObject = new TaskObject(selectedTask.getid(), selectedTask.getname(), selectedTask.getdescription(), selectedTask.getstartDate(), selectedTask.getdueDate(), selectedTask.getsubTaskList(), progress);
@@ -248,7 +248,7 @@ export class TaskServiceClient {
                     break;
             }
 
-            TaskMenuQuiteOption = ('do you want to quite the Task window : y/n \n \t ==>')
+            TaskMenuQuiteOption = ('do you want to quite the Task window : y/n \n \t ==> ')
         } while (TaskMenuQuiteOption === 'n')
     }
 
@@ -341,7 +341,7 @@ export class TaskServiceClient {
         let progressBooleaninput = await rl.question('Do You Want to Update progress \n 1. yes \n 2. no \n Enter the option no : ');
         let progress = selectedTask.getProgress();
         if (this.getBooleanOption(parseInt(progressBooleaninput))) {
-            let progressNumber = await rl.question('Enter The progress Of the Task  \n 1. ready \n 2. inProgress \n 3.extended \n  4.abandond \n  5.completed');
+            let progressNumber = await rl.question('Enter The progress Of the Task  \n 1. ready \n 2. inProgress \n 3.extended \n  4.abandond \n  5.completed : ');
             progress = this.setTaskProgress(parseInt(progressNumber));
         }
 
@@ -407,7 +407,7 @@ export class TaskServiceClient {
         }
     }
     private async subTaskOperationMethod(selectedTask: TaskObject, projectName: string, rl: any, name: string) {
-        let mainSubataskMenu = await rl.question('Choose From Following Options For Subtasks \n 1. add New subtask \n 2. show Table Of Subtask For more operation')
+        let mainSubataskMenu = await rl.question('Choose From Following Options For Subtasks \n 1. add New subtask \n 2. show Table Of Subtask For more operation : ')
         let taskId = selectedTask.getid();
         switch (parseInt(mainSubataskMenu)) {
             case 1:
@@ -415,9 +415,9 @@ export class TaskServiceClient {
                 break;
             case 2:
                 let subTaskList = await this.genrateSubTaskTable(selectedTask);
-                let indexOfSubTask = await rl.question('Select Index Of SubTask On Which you Want Perform Operation');
+                let indexOfSubTask = await rl.question('Select Index Of SubTask On Which you Want Perform Operation : ');
                 let selectedSubTask = subTaskList[parseInt(indexOfSubTask)];
-                let subTaskOptionMenu = await rl.question('Choose The Option Below \n 1. update  Sub Task \n 2. delete subtask \n 3. view subTask Table');
+                let subTaskOptionMenu = await rl.question('Choose The Option Below \n 1. update  Sub Task \n 2. delete subtask \n 3. view subTask Table : ');
                 switch (parseInt(subTaskOptionMenu)) {
                     case 1:
                         let taskToUpadate = new SubTask(selectedSubTask.getname(),selectedSubTask.getdueDate(),selectedSubTask.getdetails(),selectedSubTask.getpriority(),selectedSubTask.getstatus());
@@ -439,7 +439,7 @@ export class TaskServiceClient {
         let name = await rl.question('Enter Name of SubTask : ');
         let dueDate = await rl.question('Enter Due Date In the Format Of DD/MM/YYYY : ');
         let details = await rl.question('Enter Details of the SubTasks : ');
-        let prioritynumber = await rl.question('Choose The SubTask Priority : \n \t 1. low \n \t 2. mid \n \t 3. high ');
+        let prioritynumber = await rl.question('Choose The SubTask Priority : \n \t 1. low \n \t 2. mid \n \t 3. high : ');
         let priority = this.setSubTaskPriority(parseInt(prioritynumber));
         let status = subtasksProgresses.new;
         let subTask = new SubTask(name, dueDate, details, priority, status);
@@ -447,28 +447,28 @@ export class TaskServiceClient {
     }
 
     private async updateTheSubTask(selectedSubtask: SubTask , rl :any){
-        let nameBooleaninput = await rl.question('Do you Want to Update Name \n 1. yes \n 2. no');
+        let nameBooleaninput = await rl.question('Do you Want to Update Name \n 1. yes \n 2. no : ');
         let name = selectedSubtask.getname();
         if(this.getBooleanOption(parseInt(nameBooleaninput))){
             name = await rl.question('Enter the Name For SubTask : ');
         }
-        let dueDateBooleaninput = await rl.question('Do you Want to Update dueDate \n 1. yes \n 2. no');
+        let dueDateBooleaninput = await rl.question('Do you Want to Update dueDate \n 1. yes \n 2. no : ');
         let dueDate = selectedSubtask.getdueDate();
         if(this.getBooleanOption(parseInt(dueDateBooleaninput))){
             dueDate = await rl.question('Enter the dueDate For SubTask DD/MM/YYYY in format : ');
         }
-        let descriptionBooleaninput = await rl.question('Do you Want to Update description \n 1. yes \n 2. no');
+        let descriptionBooleaninput = await rl.question('Do you Want to Update description \n 1. yes \n 2. no : ');
         let description = selectedSubtask.getdetails();
         if(this.getBooleanOption(parseInt(descriptionBooleaninput))){
             description =await rl.question('Enter the details For SubTask : ');
         }
-        let priorityBooleaninput = await rl.question('Do you Want to Update priority \n 1. yes \n 2. no');
+        let priorityBooleaninput = await rl.question('Do you Want to Update priority \n 1. yes \n 2. no : ');
         let priority = selectedSubtask.getpriority();
         if(this.getBooleanOption(parseInt(priorityBooleaninput))){
            let priorityNumber = await rl.question('choose priority \n 1. low \n 2. mid \n 3. high Enter the priority option For SubTask : ');
            priority = this.setSubTaskPriority(parseInt(priorityNumber))
         }
-        let statusBooleaninput = await rl.question('Do you Want to Update status \n 1. yes \n 2. no');
+        let statusBooleaninput = await rl.question('Do you Want to Update status \n 1. yes \n 2. no : ');
         let status = selectedSubtask.getstatus();
         if(this.getBooleanOption(parseInt(statusBooleaninput))){
             let statusNumber = await rl.question('Enter the option for status ofSubTask : \n 1.ready \n 2. inProgress \n3. done : ');
