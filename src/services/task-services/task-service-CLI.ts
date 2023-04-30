@@ -13,52 +13,52 @@ import { AccountService } from "../account-service";
 export class TaskServiceClient {
     private readonly taskService: TaskService;
     private readonly utility: Utility;
-    private readonly accountService : AccountService;
-    constructor(@inject(TYPES.TaskService) _taskService: TaskService, @inject(TYPES.Utility) _utility: Utility, @inject(TYPES.AccountService) _accountService : AccountService) {
-        this.accountService =_accountService;
+    private readonly accountService: AccountService;
+    constructor(@inject(TYPES.TaskService) _taskService: TaskService, @inject(TYPES.Utility) _utility: Utility, @inject(TYPES.AccountService) _accountService: AccountService) {
+        this.accountService = _accountService;
         this.utility = _utility;
         this.taskService = _taskService;
     }
-    public async logIn(rl : any){
-        
+    public async logIn(rl: any) {
+
         // let spacificAccount = "";
-        let name =await rl.question('enter the name to log in : ');
+        let name = await rl.question('enter the name to log in : ');
         let accountList = await this.accountService.fetchAccountList();
-        let spacificAccount = await this.accountService.fetchSpacificAccount(name,accountList);
-        if(spacificAccount){
-            await this.mainMethodToDriveTheTaskApp(spacificAccount.getname(),rl);
-        }else {
+        let spacificAccount = await this.accountService.fetchSpacificAccount(name, accountList);
+        if (spacificAccount) {
+            await this.mainMethodToDriveTheTaskApp(spacificAccount.getname(), rl);
+        } else {
             this.utility.writeNotesOnScreen('Account does Not Exists')
         }
-        
-    }
-    public async mainMethodToDriveTheTaskApp(name: string, rl : any) {
 
-        
+    }
+    public async mainMethodToDriveTheTaskApp(name: string, rl: any) {
+
+
         let quiteOption = 'n';
         do {
-            let mainMenuOption =  await rl.question("Choose The Option Below : \n TASK MENU :- \n 1. Show The Project Tables \n 2. Add Project \n 3. Update Project \n 4. Delete Project  \n Enter the option From Above List  : => ");
+            let mainMenuOption = await rl.question("Choose The Option Below : \n TASK MENU :- \n 1. Show The Project Tables \n 2. Add Project \n 3. Update Project \n 4. Delete Project  \n Enter the option From Above List  : => ");
             switch (parseInt(mainMenuOption)) {
                 case 1:
-                await    this.showProjectTable(name,rl);
+                    await this.showProjectTable(name, rl);
                     break;
                 case 2:
-               await this.addNewProject(name,rl);
+                    await this.addNewProject(name, rl);
                     break;
                 case 3:
-                    await this.updateProject(name,rl);
+                    await this.updateProject(name, rl);
                     break;
                 case 4:
-                    await this.deleteProject(name,rl);
+                    await this.deleteProject(name, rl);
                     break;
             }
             quiteOption = await rl.question('do you want to quit "y"/"n" ? ');
 
         } while (quiteOption === 'n');
-        
+
     }
-    public async deleteProject(name : string, rl: any   ){
-      
+    public async deleteProject(name: string, rl: any) {
+
         // this section will work with project 
         let projectList = await this.showTableForProject(name);
         // console.log('\n');
@@ -66,10 +66,10 @@ export class TaskServiceClient {
         this.printLine(1);
         this.printLine(1)
         let selectedProject = projectList[parseInt(indexOfProject)];
-        await this.taskService.deleteProject(selectedProject,name);
+        await this.taskService.deleteProject(selectedProject, name);
     }
-    public async updateProject(name : string,rl :any){
-      
+    public async updateProject(name: string, rl: any) {
+
         // this section will work with project 
         let projectList = await this.showTableForProject(name);
         // console.log('\n');
@@ -79,35 +79,35 @@ export class TaskServiceClient {
         this.printLine(1)
         let selectedProject = projectList[parseInt(indexOfProject)];
 
-        let pnameBooleanNumber =await rl.question('Do you Really want to Update the project Name : \n 1. yes \n 2. no \n ==> Enter the option ==> ');
+        let pnameBooleanNumber = await rl.question('Do you Really want to Update the project Name : \n 1. yes \n 2. no \n ==> Enter the option ==> ');
         let pname = selectedProject.getprojectName();
-        if(await this.getBooleanOption(parseInt(pnameBooleanNumber))){
+        if (await this.getBooleanOption(parseInt(pnameBooleanNumber))) {
             pname = await rl.question('Enter the Name of Project : ');
         }
 
-        
-        let descriptionBooleanNumber =await rl.question('Do you Really want to Update the project description : \n 1. yes \n 2. no \n ==> Enter the option ==> ');
+
+        let descriptionBooleanNumber = await rl.question('Do you Really want to Update the project description : \n 1. yes \n 2. no \n ==> Enter the option ==> ');
         let description = selectedProject.getdetails();
-        if(await this.getBooleanOption(parseInt(descriptionBooleanNumber))){
+        if (await this.getBooleanOption(parseInt(descriptionBooleanNumber))) {
             description = await rl.question('Enter the description of Project : ');
         }
-        let newUpdatedProject = new Project(pname,description,selectedProject.gettaskList());
+        let newUpdatedProject = new Project(pname, description, selectedProject.gettaskList());
 
         await this.taskService.updateProjectDetails(selectedProject, newUpdatedProject, name);
-      
+
     }
-    public async addNewProject(name : string,rl :any){
-     
+    public async addNewProject(name: string, rl: any) {
+
         // new Project(name,details,taskList);
         let pname = await rl.question('Enter the project name : ');
         let details = await rl.question('Enter the project Details : ');
-        let taskList : TaskObject[] =[];
-        let newProject = new Project(pname,details,taskList);
+        let taskList: TaskObject[] = [];
+        let newProject = new Project(pname, details, taskList);
         this.utility.writeNotesOnScreen('You Can Add Task Once the project is created');
-        await this.taskService.addNewProjectToList(newProject,name);
+        await this.taskService.addNewProjectToList(newProject, name);
     }
-    public async showProjectTable(name: string,rl : any) {
-       
+    public async showProjectTable(name: string, rl: any) {
+
         // this section will work with project 
         let projectList = await this.showTableForProject(name);
         // console.log('\n');
@@ -158,7 +158,7 @@ export class TaskServiceClient {
             inProgressArray = this.addToTheComplimentryTables(TaskProgresses.inProgress, task, inProgressArray);
             abortedArray = this.addToTheComplimentryTables(TaskProgresses.terminated, task, abortedArray);
             readyArray = this.addToTheComplimentryTables(TaskProgresses.ready, task, readyArray);
-            newArray = this.addToTheComplimentryTables(TaskProgresses.new,task,newArray);
+            newArray = this.addToTheComplimentryTables(TaskProgresses.new, task, newArray);
             taskIndex++;
         }
         this.printLine(1);
@@ -237,14 +237,14 @@ export class TaskServiceClient {
                             this.taskService.updateTaskInExistingProject(name, projectName, selectedTask, updateObject);
                             break;
                         case 4:
-                          await  this.subTaskOperationMethod(selectedTask, projectName, rl, name);
+                            await this.subTaskOperationMethod(selectedTask, projectName, rl, name);
                             break;
 
                     }
                     break;
                 case 3:
                     //add new task
-                    await this.addNewTask(selectedProject,rl,name);
+                    await this.addNewTask(selectedProject, rl, name);
                     break;
             }
 
@@ -253,18 +253,18 @@ export class TaskServiceClient {
     }
 
     //other utility methods
-    private async addNewTask(selectedProject : Project, rl: any, aname: string){
+    private async addNewTask(selectedProject: Project, rl: any, aname: string) {
         //id: task.getid(), taskName: task.getname(), taskDescription: task.getdescription(), starDate: task.getstartDate(), dueDate: task.getdueDate(), subTaskListExisted: subTaskListFlag, progress: task.getProgress()
-        let id = selectedProject.gettaskList().length +1;
+        let id = selectedProject.gettaskList().length + 1;
         let name = await rl.question('Enter The Task Name : ');
         let description = await rl.question('Enter The Description of Task : ')
         let starDate = await rl.question('Enter the StartDate in Format as DD/MM/YYYY : ');
         let dueDate = await rl.question('Enter the DueDate in Format as DD/MM/YYYY : ');
-        let subTaskList : SubTask[] = [];
+        let subTaskList: SubTask[] = [];
         this.utility.writeNotesOnScreen('YOU CAN ADD SUBTASK AFTER The task is created');
         let progress = TaskProgresses.new;
-        let newTask = new TaskObject(id,name,description,starDate,dueDate,subTaskList,progress);
-        await this.taskService.addTaskInTheExistingProject(aname,selectedProject.getprojectName(),newTask);
+        let newTask = new TaskObject(id, name, description, starDate, dueDate, subTaskList, progress);
+        await this.taskService.addTaskInTheExistingProject(aname, selectedProject.getprojectName(), newTask);
     }
     private addToTheComplimentryTables(progress: string, task: TaskObject, array: TaskObject[]) {
         if (task.getProgress() === progress) {
@@ -316,17 +316,17 @@ export class TaskServiceClient {
         let nameBooleaninput = await rl.question('Do You Want to Update name \n 1. yes \n 2. no \n Enter the option no : ');
         let name = selectedTask.getname();
         if (this.getBooleanOption(parseInt(nameBooleaninput))) {
-            name =await rl.question('Enter The name Of the Task : ');
+            name = await rl.question('Enter The name Of the Task : ');
         }
         let descriptionBooleaninput = await rl.question('Do You Want to Update description \n 1. yes \n 2. no \n Enter the option no : ');
         let description = selectedTask.getdescription();
         if (this.getBooleanOption(parseInt(descriptionBooleaninput))) {
-            description =await rl.question('Enter The description Of the Task :');
+            description = await rl.question('Enter The description Of the Task :');
         }
         let startDateBooleaninput = await rl.question('Do You Want to Update startDate \n 1. yes \n 2. no \n Enter the option no : ');
         let startDate = selectedTask.getstartDate();
         if (this.getBooleanOption(parseInt(startDateBooleaninput))) {
-            startDate =await rl.question('Enter The startDate Of the Task :');
+            startDate = await rl.question('Enter The startDate Of the Task :');
         }
         let dueDateBooleaninput = await rl.question('Do You Want to Update dueDate \n 1. yes \n 2. no \n Enter the option no : ');
         let dueDate = selectedTask.getdueDate();
@@ -411,7 +411,7 @@ export class TaskServiceClient {
         let taskId = selectedTask.getid();
         switch (parseInt(mainSubataskMenu)) {
             case 1:
-                await this.addNewSubtask(rl, name, projectName,taskId );
+                await this.addNewSubtask(rl, name, projectName, taskId);
                 break;
             case 2:
                 let subTaskList = await this.genrateSubTaskTable(selectedTask);
@@ -420,12 +420,12 @@ export class TaskServiceClient {
                 let subTaskOptionMenu = await rl.question('Choose The Option Below \n 1. update  Sub Task \n 2. delete subtask \n 3. view subTask Table : ');
                 switch (parseInt(subTaskOptionMenu)) {
                     case 1:
-                        let taskToUpadate = new SubTask(selectedSubTask.getname(),selectedSubTask.getdueDate(),selectedSubTask.getdetails(),selectedSubTask.getpriority(),selectedSubTask.getstatus());
-                        let updatedSubtask=await  this.updateTheSubTask(taskToUpadate,rl);
-                        await this.taskService.updateSubTaskInExistingProject(name, projectName,taskId,selectedSubTask,updatedSubtask);
+                        let taskToUpadate = new SubTask(selectedSubTask.getname(), selectedSubTask.getdueDate(), selectedSubTask.getdetails(), selectedSubTask.getpriority(), selectedSubTask.getstatus());
+                        let updatedSubtask = await this.updateTheSubTask(taskToUpadate, rl);
+                        await this.taskService.updateSubTaskInExistingProject(name, projectName, taskId, selectedSubTask, updatedSubtask);
                         break;
                     case 2:
-                        await this.taskService.deleteSubTaskInExistingProject(name,projectName,taskId,selectedSubTask);
+                        await this.taskService.deleteSubTaskInExistingProject(name, projectName, taskId, selectedSubTask);
                         break;
                     case 3:
                         let subTaskList = await this.genrateSubTaskTable(selectedTask);
@@ -446,31 +446,31 @@ export class TaskServiceClient {
         this.taskService.AddSubTaskInTheExistingOrNewProject(aname, projectName, taskId, [subTask])
     }
 
-    private async updateTheSubTask(selectedSubtask: SubTask , rl :any){
+    private async updateTheSubTask(selectedSubtask: SubTask, rl: any) {
         let nameBooleaninput = await rl.question('Do you Want to Update Name \n 1. yes \n 2. no : ');
         let name = selectedSubtask.getname();
-        if(this.getBooleanOption(parseInt(nameBooleaninput))){
+        if (this.getBooleanOption(parseInt(nameBooleaninput))) {
             name = await rl.question('Enter the Name For SubTask : ');
         }
         let dueDateBooleaninput = await rl.question('Do you Want to Update dueDate \n 1. yes \n 2. no : ');
         let dueDate = selectedSubtask.getdueDate();
-        if(this.getBooleanOption(parseInt(dueDateBooleaninput))){
+        if (this.getBooleanOption(parseInt(dueDateBooleaninput))) {
             dueDate = await rl.question('Enter the dueDate For SubTask DD/MM/YYYY in format : ');
         }
         let descriptionBooleaninput = await rl.question('Do you Want to Update description \n 1. yes \n 2. no : ');
         let description = selectedSubtask.getdetails();
-        if(this.getBooleanOption(parseInt(descriptionBooleaninput))){
-            description =await rl.question('Enter the details For SubTask : ');
+        if (this.getBooleanOption(parseInt(descriptionBooleaninput))) {
+            description = await rl.question('Enter the details For SubTask : ');
         }
         let priorityBooleaninput = await rl.question('Do you Want to Update priority \n 1. yes \n 2. no : ');
         let priority = selectedSubtask.getpriority();
-        if(this.getBooleanOption(parseInt(priorityBooleaninput))){
-           let priorityNumber = await rl.question('choose priority \n 1. low \n 2. mid \n 3. high Enter the priority option For SubTask : ');
-           priority = this.setSubTaskPriority(parseInt(priorityNumber))
+        if (this.getBooleanOption(parseInt(priorityBooleaninput))) {
+            let priorityNumber = await rl.question('choose priority \n 1. low \n 2. mid \n 3. high Enter the priority option For SubTask : ');
+            priority = this.setSubTaskPriority(parseInt(priorityNumber))
         }
         let statusBooleaninput = await rl.question('Do you Want to Update status \n 1. yes \n 2. no : ');
         let status = selectedSubtask.getstatus();
-        if(this.getBooleanOption(parseInt(statusBooleaninput))){
+        if (this.getBooleanOption(parseInt(statusBooleaninput))) {
             let statusNumber = await rl.question('Enter the option for status ofSubTask : \n 1.ready \n 2. inProgress \n3. done : ');
             status = this.setSubTaskStatus(parseInt(statusNumber));
         }
@@ -523,7 +523,8 @@ export class TaskServiceClient {
         let index = 0;
         for (let subTask of subTasksList) {
             let color = this.getColourForPriority(subTask.getpriority());
-            table.addRow({ index: index, name: subTask.getname(), due_date: subTask.getdueDate(), details : subTask.getdetails() ,priority: subTask.getpriority(), status: subTask.getstatus() }, { color: color });
+            table.addRow({ index: index, name: subTask.getname(), due_date: subTask.getdueDate(), details: subTask.getdetails(), priority: subTask.getpriority(), status: subTask.getstatus() }, { color: color });
+            index++;
         }
         table.printTable();
 

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        select {
+            height: 50px;
+            width: 200px;
+            font-size: medium;
+            text-align: center;
+            color: aliceblue;
+            background-color: orange;
+            margin: 5px;
+        }
+
+        #input1 {
+            justify-content: center;
+            text-align: center;
+            width: auto;
+        }
+
+        option {
+            color: aliceblue;
+            background-color: orange;
+        }
+
+        option::selection {
+            background-color: aliceblue;
+            color: orange;
+        }
+
+        li {
+            margin-top: 2%;
+            padding: 2%;
+            height: auto;
+            width: inherit;
+            border-radius: 5px;
+            border: 1px dashed orange;
+        }
+
+        input[type=file] {
+            border: none;
+            color: aliceblue;
+            background-color: orange;
+            border-radius: 5px;
+            padding: 16px;
+            width: inherit;
+        }
+
+        button {
+            height: 50px;
+            width: 150px;
+            border: none;
+            padding: 2px 10px;
+            color: aliceblue;
+            background-color: orange;
+            box-shadow: 5px 4px 5px whitesmoke;
+            border-radius: 5px;
+        }
+
+        #formsubtask {
+            border: 1px solid orange;
+            padding: 1%;
+            margin: 5px;
+            border-radius: 20px;
+            text-align: left;
+            text-overflow: clip;
+            display: inline-flex;
+            flex-wrap: wrap;
+            width: inherit;
+        }
+
+        button:hover {
+            height: 50px;
+            width: 150px;
+            border: none;
+            padding: 2px 10px;
+            color: rgb(161, 114, 4);
+            background-color: rgba(238, 193, 121, 0.907);
+            box-shadow: 5px 4px 5px rgb(133, 81, 25);
+            border-radius: 5px;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        button:active {
+            height: 50px;
+            width: 150px;
+            border: none;
+            padding: 2px 10px;
+            color: orange;
+            background-color: white;
+            box-shadow: 3px 2px 3px orangered;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .card {
+            border: 1px solid orange;
+            padding: 2%;
+            margin: 1% 1%;
+            border-radius: 20px;
+            text-align: center;
+            text-overflow: clip;
+            display: inline-flex;
+            flex-wrap: wrap;
+            text-overflow: clip;
+            width: 40%;
+
+        }
+
+        .cardsubtask {
+            border: 1px solid orange;
+            padding: 2%;
+            margin: 5px;
+            border-radius: 20px;
+            text-align: center;
+            text-overflow: clip;
+            display: inline-flex;
+            flex-wrap: wrap;
+            width: inherit;
+        }
+
+        .cardtask {
+            border: 1px solid orange;
+            padding: 1%;
+            margin: 5px;
+            border-radius: 20px;
+            text-align: center;
+            text-overflow: clip;
+            display: inline-flex;
+            flex-wrap: wrap;
+            width: inherit;
+        }
+
+        #containerHeader {
+            text-align: center;
+            border: 1px solid orange;
+            padding: 1%;
+            margin: 5px;
+            border-radius: 20px;
+            justify-content: baseline;
+        }
+
+        #taskHeader {
+            text-align: center;
+        }
+
+        input[type=text] {
+            width: 20%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: orange;
+        }
+
+        #loadarea {
+            border: 1px solid green;
+            margin: 1% 0%;
+            display: inline-flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="containerHeader">
+        <input type="file" id="fileInput" accept=".json"></input>
+        <button id="btn">Proceed with file</button>
+    </div>
+    <div>
+        <div id="formLoadingSection"></div>
+        <div id="loadArea">
+        </div>
+</body>
+<script>
+    let files = "";
+    let textFile = "";
+    let eventListener = document.getElementById('fileInput').addEventListener('change', (e) => {
+        files = e.target.files;
+
+    }
+    )
+    let eventListenerForButton = document.getElementById('btn').addEventListener('click', (e) => {
+        mainFunction();
+    })
+    let mainFunction = () => {
+        var fr = new FileReader();
+
+        fr.onloadend = function () {
+
+            let textContent = fr.result;
+            // console.log(textContent)
+            getFileContent(textContent);
+        }
+        let zerotheFile = fr.readAsText(files[0]);
+
+    }
+
+    let getFileContent = (file) => {
+        let fileContent = JSON.parse(file);
+
+        let mainBodyLoadArea = document.getElementById('loadArea');
+        let countChild = mainBodyLoadArea.childElementCount;
+        if (countChild = 0) {
+            projectFunction(fileContent, mainBodyLoadArea);
+        } else {
+            var rem = mainBodyLoadArea.childNodes;
+            var remarr = Array.from(rem);
+            for (let j = 0; j < remarr.length; j++) {
+                mainBodyLoadArea.removeChild(remarr[j]);
+            }
+            projectFunction(fileContent, mainBodyLoadArea);
+        }
+
+
+    }
+    let projectFunction = (fileContent, mainBodyLoadArea) => {
+        let nodeToCreate = document.createElement('div');
+        nodeToCreate.id = 'btnAddProjectCart'
+        nodeToCreate.className = 'projectButton'
+        nodeToCreate.innerHTML = `<button id="addProjectBtn">Add Project</button>`;
+        mainBodyLoadArea.appendChild(nodeToCreate);
+        for (let i = 0; i < fileContent.length; i++) {
+            let newNode = document.createElement('div');
+            newNode.id = `div${i}`;
+            newNode.className = 'card';
+            newNode.innerHTML = `<div><h3>${i} : ${fileContent[i].projectName}</h3><h3>${fileContent[i].details}</h3><button id="tbtn${i}"> GO TO TASKS (${fileContent[i].taskList.length})</button></div><div><button id="addTsk${i}"> Add Task</button></div><div id="d${i}"></div>`;
+            mainBodyLoadArea.appendChild(newNode);
+            let addEventListeneronBtn = document.getElementById(`tbtn${i}`).addEventListener('click', (e) => {
+                tbtnFunction(`d${i}`, fileContent[i].taskList, fileContent[i], fileContent, i)
+            })
+            let addtaskEventListner = document.getElementById(`addTsk${i}`).addEventListener("click", (e) => {
+                // (elementId, project, fileContent, projectIndex)
+                AddTaskFunction(`d${i}`, fileContent[i], fileContent, i);
+            })
+        }
+        let addprojectbtnEventListner = document.getElementById('addProjectBtn').addEventListener("click", () => {
+            addProjectFunction(fileContent, 'formLoadingSection');
+        })
+    }
+    let tbtnFunction = (elementId, taskList, project, fileContent, projectIndex) => {
+        let element = document.getElementById(elementId);
+        for (let j = 0; j < taskList.length; j++) {
+            let newNode1 = document.createElement('div')
+            newNode1.id = `t${j}`;
+            newNode1.className = 'cardtask';
+            newNode1.innerHTML = `<div id = "taskHeader" ><h3>${j}  : ${taskList[j].name}</h3></div><div><ul><li><b>description :</b> ${taskList[j].description}</li><li><b>startDate :</b> ${taskList[j].startDate}</li><li><b>dueDate :</b>${taskList[j].dueDate}</li><li><b>progress :</b>${taskList[j].progress}</li><li><button id="stbtn${j}"> GO TO SUBTASKS (${taskList[j].subTaskList.length})</button></li><li><button id="stbtnadd${j}"> add SubTask </button></li></ul></div><div id="ds${j}"></div>`
+            element.appendChild(newNode1);
+            let addEventListeneronBtn = document.getElementById(`stbtn${j}`).addEventListener('click', (e) => {
+                sbtnFunction(`ds${j}`, taskList[j].subTaskList)
+            })
+
+            let addSubTaskEventListner = document.getElementById(`stbtnadd${j}`).addEventListener("click", (e) => { AddSubTaskFunction(`ds${j}`, project, j, fileContent, projectIndex) })
+
+        }
+
+
+    }
+    let sbtnFunction = (elementId, taskList) => {
+        let element = document.getElementById(elementId);
+        for (let j = 0; j < taskList.length; j++) {
+            let newNode1 = document.createElement('div')
+            newNode1.id = `st${j}`;
+            newNode1.className = 'cardsubtask';
+            newNode1.innerHTML = `<div id="taskHeader"><h3>${j}  : ${taskList[j].name}</h3><div><div><ul><li><b>description :</b> ${taskList[j].details}</li><li><b>priority :</b> ${taskList[j].priority}</li><li><b>dueDate :</b>${taskList[j].dueDate}</li><li><b>status :</b>${taskList[j].status}</li></ul></div>`
+            element.appendChild(newNode1);
+        }
+
+    }
+
+    // to download file 
+    function download(data, filename, type) {
+        var file = new Blob([data], { type: type });
+        if (window.navigator.msSaveOrOpenBlob) // IE10+
+            window.navigator.msSaveOrOpenBlob(file, filename);
+        else { // Others
+            var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+    }
+    let addProjectFunction = (fileContent, areaToLoadId) => {
+        let element = document.getElementById(areaToLoadId);
+        let name = "";
+        let details = "";
+        let taskList = [];
+        let newNode1 = document.createElement('div')
+        newNode1.id = `form`;
+        newNode1.className = 'cardsubtask';
+        newNode1.innerHTML = `<div id="formsubtask"><div id="taskHeader"><h3> add new Porject </h3><div> <input type="text" id="name" value='${name}' onchange='${name}' placeholder="Enter Name" />
+         <input type="text" id="details" value='${details}' onchange="${details}" placeholder="Enter details" />
+                <button id="AddProject"> Add new Project </button></div></div>`
+        element.appendChild(newNode1);
+        let nameEvent = document.getElementById('name').addEventListener('change', (e) => {
+            name = e.target.value;
+        })
+        let detailsEvent = document.getElementById('details').addEventListener('change', (e) => {
+            details = e.target.value;
+        })
+
+        let addButtonEvent = document.getElementById('AddProject').addEventListener("click", (e) => {
+            let newProject = { projectName: name, details: details, taskList: taskList };
+            fileContent.push(newProject);
+            download(JSON.stringify(fileContent), 'shubham_taskFile.json', 'json');
+            alert("project added successfully")
+        })
+
+    }
+    let AddSubTaskFunction = (elementId, project, indexoftask, fileContent, projectIndex) => {
+        let element = document.getElementById(elementId);
+        let name = "";
+        let status = "new";
+        let dueDate = "";
+        let details = "";
+        let priority = "";
+        let newNode1 = document.createElement('div')
+        newNode1.id = `form`;
+        newNode1.className = 'cardsubtask';
+        newNode1.innerHTML = `<div id="formsubtask"><div id="taskHeader"><h3> add new subtask for task Index ${indexoftask} </h3><div> <input type="text" id="name" value='${name}' onchange='${name}' placeholder="Enter Name" />
+         <input type="text" id="details" value='${details}' onchange="${details}" placeholder="Enter details" />
+             <input type="date" id="dueDate" value='${dueDate}' onchange='${dueDate}' placeholder="Enter dueDate" />
+              <br/>   <label for="priority">Choose priority:</label>
+            <select name=" priority" id="priority">
+                <option value="low">low</option>
+                <option value="mid">mid</option>
+                <option value="high">high</option>
+            </select><div>
+                <button id="Add"> Add SubTask </button></div></div>`
+        element.appendChild(newNode1);
+        let nameEvent = document.getElementById('name').addEventListener('change', (e) => {
+            name = e.target.value;
+        })
+        let detailsEvent = document.getElementById('details').addEventListener('change', (e) => {
+            details = e.target.value;
+        })
+        let dueDateEvent = document.getElementById('dueDate').addEventListener('change', (e) => {
+            dueDate = e.target.value;
+        })
+
+        let priorityEvent = document.getElementById('priority').addEventListener("change", (e) => {
+            priority = e.target.value;
+        });
+
+
+        let addButtonEvent = document.getElementById('Add').addEventListener("click", (e) => {
+            let subtaskNew = { name: name, details: details, status: status, dueDate: dueDate, priority: priority };
+            project.taskList[indexoftask].subTaskList.push(subtaskNew);
+            fileContent[projectIndex] = project;
+            download(JSON.stringify(fileContent), 'shubham_taskFile.json', 'json');
+            alert("Subtask added successfully")
+        })
+
+    }
+    let AddTaskFunction = (elementId, project, fileContent, projectIndex) => {
+        let element = document.getElementById(elementId);
+        let name = "";
+        let dueDate = "";
+        let details = "";
+        let startDate = "";
+        let newNode1 = document.createElement('div')
+        newNode1.id = `form`;
+        newNode1.className = 'cardsubtask';
+        newNode1.innerHTML = `<div id="formsubtask"><div id="taskHeader"><h3> add new task for project Index ${projectIndex} </h3></div><div> <input type="text" id="name" value='${name}' onchange='${name}' placeholder="Enter Name" />
+         <input type="text" id="details" value='${details}' onchange="${details}" placeholder="Enter details" />
+         <input type="date" id="startDate" value='${startDate}' onchange='${startDate}' placeholder="Enter startDate" />
+             <input type="date" id="dueDate" value='${dueDate}' onchange='${dueDate}' placeholder="Enter dueDate" />
+                <button id="AddTASK1"> Add Task </button></div></div>`
+        element.appendChild(newNode1);
+        let nameEvent = document.getElementById('name').addEventListener('change', (e) => {
+            name = e.target.value;
+        })
+        let detailsEvent = document.getElementById('details').addEventListener('change', (e) => {
+            details = e.target.value;
+        })
+        let startDateEvent = document.getElementById('startDate').addEventListener('change', (e) => {
+            stardDate = e.target.value;
+        })
+        let dueDateEvent = document.getElementById('dueDate').addEventListener('change', (e) => {
+            dueDate = e.target.value;
+        })
+
+        let id = project.taskList.length + 1;
+        // id, name, description, startDate, dueDate, subTaskList, progress
+        let addButtonEvent = document.getElementById('AddTASK1').addEventListener("dblclick", (e) => {
+            let taskNew = { id: id, name: name, description: details, startDate: startDate, dueDate: dueDate, progress: 'new', subTaskList: [] };
+            project.taskList.push(taskNew);
+            fileContent[projectIndex] = project;
+            download(JSON.stringify(fileContent), 'shubham_taskFile.json', 'json');
+            alert("task added successfully")
+        })
+    }
+</script>
+
+</html>
