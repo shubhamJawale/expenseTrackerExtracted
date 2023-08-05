@@ -133,7 +133,7 @@ export class AccountService {
     public async createDefaultAccountFiles(name: string) {
         let expenseDetailsOverview = new ExpenseTrackerOverview(name, 0, 0, 0, 0, 0, (Date.now().toString()))
         await this.expenseTrackerService.AddAccountOrUpdateAccount(expenseDetailsOverview, name);
-        let expenseTrackerCsvRow = new ExpeneseDetailsCsvRow(uuid(), "Opening Transaction", "Accont Opened", "0", "0", transactionCategory.other, typeOfTransaction.income, await this.utility.convertTimeStamp((Date.now())))
+        let expenseTrackerCsvRow = new ExpeneseDetailsCsvRow(uuid(), "Opening Transaction", "Accont Opened", "0", "0", transactionCategory[10], typeOfTransaction.income, await this.utility.convertTimeStamp((Date.now())))
         await this.expenseTrackerService.addTransactionToCSV(expenseTrackerCsvRow, name);
         // let lentBorrowDetailsSingle = new LentBorrowTransaction(name, LentBorrowTransactionType.lent, 0);
         // await this.lentBorrowTransctionService.updateOrCreateLetBorrowAccountDetils(name, lentBorrowDetailsSingle, LentBorrowTransactionType.lent);

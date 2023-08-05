@@ -28,19 +28,20 @@ export let fileTypes = {
     csv: 'csv'
 }
 
-export let transactionCategory = {
-    food: "Food",
-    fuel: "Fuel",
-    rent: "Rent",
-    bills: "Bills",
-    exported: "Exported",
-    salary: 'Salary',
-    imported: 'Imported',
-    helthCare: 'HealthCare',
-    otherHealthCare: "OtherHealthCare",
-    carOrBike: "CarOrBike",
-    other: "Other"
-}
+export let transactionCategory = [
+    "Food",
+    "Fuel",
+    "Rent",
+    "Bills",
+    "Exported",
+    'Salary',
+    'Imported',
+    'HealthCare',
+    "OtherHealthCare",
+    "CarOrBike",
+    "Other"
+
+]
 
 export const typeOfTransaction = {
     income: "Income",

@@ -147,44 +147,24 @@ export class ExpenseAppCLIService {
         console.log(account);
     }
     private async getTransactioncategory(rl: any) {
-        let category = "";
-        let categoryNo = await rl.question('Choose Category From List \n a. bills \n b. carOrBike \n c. exported \n d. food \n e. fuel \n f. healthCare \n g. imported \n  h. other \n i. otherHealthCare \n j. rent \n k. salary  Enter Transaction Category charecter : ')
-        switch (categoryNo) {
-            case 'a':
-                category = transactionCategory.bills
-                break;
-            case 'b':
-                category = transactionCategory.carOrBike
-                break;
-            case 'c':
-                category = transactionCategory.exported
-                break;
-            case 'd':
-                category = transactionCategory.food
-                break;
-            case 'e':
-                category = transactionCategory.fuel
-                break;
-            case 'f':
-                category = transactionCategory.helthCare
-                break;
-            case 'g':
-                category = transactionCategory.imported
-                break;
-            case 'h':
-                category = transactionCategory.other
-                break;
-            case 'i':
-                category = transactionCategory.otherHealthCare
-                break;
-            case 'j':
-                category = transactionCategory.rent
-                break;
-            case 'k':
-                category = transactionCategory.salary
-                break;
 
-        }
+        this.printCategories(transactionCategory)
+        // \n a. bills \n b. carOrBike \n c. exported \n d. food \n e. fuel \n f. healthCare \n g. imported \n  h. other \n i. otherHealthCare \n j. rent \n k. salary 
+        let categoryNo = await rl.question('Choose Category From List \n Enter Transaction Category charecter : ');
+        const charCodeToSubstract = 96;
+        categoryNo = categoryNo.toLowerCase();
+        let indexOfCategory = categoryNo.charCodeAt(0) - charCodeToSubstract;
+        let category = transactionCategory[indexOfCategory];
         return category;
+    }
+
+    private printCategories(arrayOfCategories: Array<string>) {
+        let char = "a";
+        let charCode = char.charCodeAt(0);
+        arrayOfCategories.forEach((category: string) => {
+            console.log(`${char} : ${category}`);
+            charCode++;
+            char = String.fromCharCode(charCode);
+        })
     }
 }
