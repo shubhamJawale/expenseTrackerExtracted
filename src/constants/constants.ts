@@ -13,8 +13,10 @@ export let CONSTANTS = {
     lentBorrowJsonFileName: 'LentBorrowDetails',
     // lentBorrowJsonFilePath: './resources/files'
     taskFilePath: './resources/files/tasks/',
-    taskFileName: 'taskFile'
+    taskFileName: 'taskFile',
 
+    // day of the month to expect to change the month according to salary day
+    dayOfSalary: 24
 }
 export let accountOperations = {
     create: "create",
@@ -69,7 +71,7 @@ export const ColourForTransactionRow = {
     yellow: 'yellow'
 }
 export const TaskProgresses = {
-    new :'new',
+    new: 'new',
     ready: 'Ready',
     inProgress: 'InProgress',
     extended: 'Extended',
@@ -77,15 +79,15 @@ export const TaskProgresses = {
     completed: 'Completed'
 }
 export const subtasksProgresses = {
-    new :'new',
+    new: 'new',
     done: 'done',
     inProgress: 'inprogress',
     ready: 'ready'
 }
 export const subTaskPriority = {
-    low : "low",
-    mid : "mid",
-    high : "high"
+    low: "low",
+    mid: "mid",
+    high: "high"
 }
 
 

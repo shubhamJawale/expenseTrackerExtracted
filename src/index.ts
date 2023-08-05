@@ -16,8 +16,6 @@ import { ExpenseAppCLIService } from "./services/expense-app-cli-service";
 import { Account } from "./models/account";
 import { LentBorrowTrackingService } from "./services/lentBorrow-tracking-service";
 import { LentBorrowTrackingCLIService } from "./services/lentBorrow-tracking-CLI-service";
-import { TaskService } from "./services/task-services/task-service";
-import { TaskServiceClient } from "./services/task-services/task-service-CLI";
 let driverService = new DriverService();
 
 let readLine = driverService.takeInput(readline);
@@ -29,11 +27,9 @@ let fileSystemService = new FileSystemService(fsClient, logWritter);
 let expense = new ExpenseTrackerService(fileSystemService, logWritter, utility);
 let lentBorrow = new LentBorrowTrackingService(fileSystemService, logWritter, utility);
 let lentBorrowCLI = new LentBorrowTrackingCLIService(lentBorrow);
-let taskService = new TaskService(fileSystemService,utility,logWritter);
-let account = new AccountService(fileSystemService, expense, utility, logWritter, lentBorrow,taskService);
-let taskCli = new TaskServiceClient(taskService,utility,account);
+let account = new AccountService(fileSystemService, expense, utility, logWritter, lentBorrow);
 let erxpenseappclientsvc = new ExpenseAppCLIService(account, driverService, expense, utility, lentBorrowCLI);
-let common = new CommonService(account, driverService, erxpenseappclientsvc,taskCli);
+let common = new CommonService(account, driverService, erxpenseappclientsvc);
 let printName = async () => {
     // let response = await expense.AddTransactionToAnOldAccount(1000, typeOfTransaction.income, transactionCategory.other, "test transacton", "testing", 'shubham')
     //await account.createDefaultAccountFiles('shubham');
@@ -46,7 +42,7 @@ let printName = async () => {
     // });
     // let account: Account = new Account('1', 'shubham', 'anything');
     // erxpenseappclientsvc.AfterLogInMenu('shubham', rl, account)
-// taskCli.mainMethodToDriveTheTaskApp('shubham')
+    // taskCli.mainMethodToDriveTheTaskApp('shubham')
 }
 
 printName();

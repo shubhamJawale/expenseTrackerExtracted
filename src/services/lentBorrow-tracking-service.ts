@@ -69,7 +69,6 @@ export class LentBorrowTrackingService {
             }
         }
         else {
-            console.log('comming here')
             jsonToSave = [lentBorrowDetailsSingle];
             let fileResponse = await this.fileSystemService.saveJsonData(fileName, CONSTANTS.filePath, jsonToSave);
             await this.logWritter.writeLogs('LentBorrowAccountDetails Added', filePrefix.transction);

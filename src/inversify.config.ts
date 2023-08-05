@@ -13,8 +13,6 @@ import { CommonService } from "./services/common-service";
 import { DriverService } from "./services/driver-service";
 import { LentBorrowTrackingService } from "./services/lentBorrow-tracking-service";
 import { LentBorrowTrackingCLIService } from "./services/lentBorrow-tracking-CLI-service";
-import { TaskService } from "./services/task-services/task-service";
-import { TaskServiceClient } from "./services/task-services/task-service-CLI";
 
 const container = new Container();
 //container.bind<SERVICE>(TYPES.service).to(SERVICE).inSinglotonScope();
@@ -29,5 +27,3 @@ container.bind<CommonService>(TYPES.CommonService).to(CommonService).inSingleton
 container.bind<DriverService>(TYPES.DriverService).to(DriverService).inSingletonScope();
 container.bind<LentBorrowTrackingService>(TYPES.LentBorrowTrackingService).to(LentBorrowTrackingService).inSingletonScope();
 container.bind<LentBorrowTrackingCLIService>(TYPES.LentBorrowTrackingCLIService).to(LentBorrowTrackingCLIService).inSingletonScope();
-container.bind<TaskService>(TYPES.TaskService).to(TaskService).inSingletonScope();
-container.bind<TaskServiceClient>(TYPES.TaskServiceClient).to(TaskServiceClient).inSingletonScope();

@@ -67,12 +67,14 @@ export class ExpenseTrackerService {
         let oldDate = new Date(timeStamp);
         let oldMonth = oldDate.getMonth();
         let oldYear = oldDate.getFullYear();
+        let oldDay = oldDate.getDate();
         let currentDate = new Date(Date.now());
         let currentMonth = currentDate.getMonth();
         let currentYear = currentDate.getFullYear();
+        let currentDay = currentDate.getDate();
         let flag = false;
         // console.log('cy : ' + currentYear + " cM : " + currentMonth + " oldyear : " + oldYear + "oldmonth : " + oldMonth)
-        if (currentYear == oldYear && currentMonth == oldMonth) {
+        if (currentYear == oldYear && currentMonth == oldMonth && currentDay <= CONSTANTS.dayOfSalary) {
             flag = true;
         }
         return flag;
