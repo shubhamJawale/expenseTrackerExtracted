@@ -11,8 +11,11 @@ const TYPES = {
     DriverService: Symbol.for('DriverService'),
     LentBorrowTrackingService: Symbol.for('LentBorrowTrackingService'),
     LentBorrowTrackingCLIService: Symbol.for('LentBorrowTrackingCLIService'),
-    TaskService: Symbol.for('TaskService'),
-    TaskServiceClient : Symbol.for('TaskServiceClient'),
+    CreditCardModuleService: Symbol.for('CreditCardModuleService'),
+    FileUtility: Symbol.for('FileUtility'),
+    CreditCardLoanManagementService: Symbol.for('CreditCardLoanManagementService'),
+    CreditCardCLIService: Symbol.for('CreditCardCLIService'),
+    CreditCardLoanCli: Symbol.for('CreditCardLoanCli')
 }
 
 export default TYPES;

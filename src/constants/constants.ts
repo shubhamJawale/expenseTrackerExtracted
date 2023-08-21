@@ -12,11 +12,15 @@ export let CONSTANTS = {
     accountFileName: 'accountList',
     lentBorrowJsonFileName: 'LentBorrowDetails',
     // lentBorrowJsonFilePath: './resources/files'
-    taskFilePath: './resources/files/tasks/',
-    taskFileName: 'taskFile',
-
+    creditCardCsvFileName: "CreditTransaction",
+    creditCardOverviewFile: "CreditCardOverviewFile",
     // day of the month to expect to change the month according to salary day
-    dayOfSalary: 24
+    dayOfSalary: 24,
+    creditCardBillDay: 22,
+    firstDayOfMonth: 1,
+    lastDayToPayBill: 10,
+    // loan file
+    loanFileName: "CreditCardLoan"
 }
 export let accountOperations = {
     create: "create",
@@ -28,25 +32,29 @@ export let fileTypes = {
     csv: 'csv'
 }
 
-export let transactionCategory = {
-    food: "Food",
-    fuel: "Fuel",
-    rent: "Rent",
-    bills: "Bills",
-    exported: "Exported",
-    salary: 'Salary',
-    imported: 'Imported',
-    helthCare: 'HealthCare',
-    otherHealthCare: "OtherHealthCare",
-    carOrBike: "CarOrBike",
-    other: "Other"
-}
+export let transactionCategory = [
+    "Food",
+    "Fuel",
+    "Rent",
+    "Bills",
+    "Exported",
+    'Salary',
+    'Imported',
+    'HealthCare',
+    "OtherHealthCare",
+    "CarOrBike",
+    "Other"
+
+]
 
 export const typeOfTransaction = {
     income: "Income",
     expenditure: "Expenditure"
 }
-
+export const typeOfCreditCardTransaction = {
+    expenditure: "Expenditure",
+    billPayed: "Bill Payed/Credited"
+}
 export const filePrefix = {
     dev: "dev",
     transction: "transaction",
@@ -90,4 +98,17 @@ export const subTaskPriority = {
     high: "high"
 }
 
+export const loanStatus = {
+    active: "Active",
+    cloased: "Closed"
+}
 
+export const tenureStatus = {
+    paid: "Paid",
+    pending: "Pending",
+    pendingFromBorrower: "Pending from borrower but paid by me"
+}
+
+export const months = [
+    'jan', 'feb', 'march', 'april', 'may', 'jun', 'jully', 'aug', 'sept', 'oct', 'nov', 'dec'
+]
