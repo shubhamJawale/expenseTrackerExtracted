@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import { Container } from "inversify";
-
 import { FSClient } from "./clients/fs-client";
 import { ExpenseTrackerService } from "./services/expense-tracker-service";
 import { FileSystemService } from "./services/file-system-service";
@@ -13,6 +12,11 @@ import { CommonService } from "./services/common-service";
 import { DriverService } from "./services/driver-service";
 import { LentBorrowTrackingService } from "./services/lentBorrow-tracking-service";
 import { LentBorrowTrackingCLIService } from "./services/lentBorrow-tracking-CLI-service";
+import { CreditCardModuleService } from "./services/credit-card-module-service";
+import { FileUtility } from "./utility/fileUtility";
+import { CreditCardLoanManagementService } from "./services/credit-card-loan-management-service";
+import { CreditCardCLIService } from "./services/credit-card-modul-cli-service";
+import { CreditCardLoanCli } from "./services/credit-card-loan-cli-service";
 
 const container = new Container();
 //container.bind<SERVICE>(TYPES.service).to(SERVICE).inSinglotonScope();
@@ -27,3 +31,8 @@ container.bind<CommonService>(TYPES.CommonService).to(CommonService).inSingleton
 container.bind<DriverService>(TYPES.DriverService).to(DriverService).inSingletonScope();
 container.bind<LentBorrowTrackingService>(TYPES.LentBorrowTrackingService).to(LentBorrowTrackingService).inSingletonScope();
 container.bind<LentBorrowTrackingCLIService>(TYPES.LentBorrowTrackingCLIService).to(LentBorrowTrackingCLIService).inSingletonScope();
+container.bind<CreditCardModuleService>(TYPES.CreditCardModuleService).to(CreditCardModuleService).inSingletonScope();
+container.bind<FileUtility>(TYPES.FileUtility).to(FileUtility).inSingletonScope();
+container.bind<CreditCardLoanManagementService>(TYPES.CreditCardLoanManagementService).to(CreditCardLoanManagementService).inSingletonScope();
+container.bind<CreditCardCLIService>(TYPES.CreditCardCLIService).to(CreditCardCLIService).inSingletonScope();
+container.bind<CreditCardLoanCli>(TYPES.CreditCardLoanCli).to(CreditCardLoanCli).inSingletonScope();

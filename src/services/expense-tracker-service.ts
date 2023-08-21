@@ -8,13 +8,16 @@ import { LogWritter } from "../utility/logWritter";
 import { ExpenseTrackerOverview } from "../models/expense-tracker-overview";
 import { v4 as uuid } from 'uuid'
 import { Utility } from "../utility/utility";
+import { FileUtility } from "../utility/fileUtility";
 
 @injectable()
 export class ExpenseTrackerService {
     private readonly fileSystemService: FileSystemService;
     private readonly logWritter: LogWritter;
     private readonly utility: Utility;
-    constructor(@inject(TYPES.FileSystemService) _fileSystemService: FileSystemService, @inject(TYPES.LogWritter) _logWritter: LogWritter, @inject(TYPES.Utility) _utility: Utility) {
+    private readonly fileUtility: FileUtility;
+    constructor(@inject(TYPES.FileSystemService) _fileSystemService: FileSystemService, @inject(TYPES.LogWritter) _logWritter: LogWritter, @inject(TYPES.Utility) _utility: Utility, @inject(TYPES.FileUtility) _fileUtility: FileUtility) {
+        this.fileUtility = _fileUtility;
         this.utility = _utility;
         this.logWritter = _logWritter;
         this.fileSystemService = _fileSystemService;
@@ -26,7 +29,7 @@ export class ExpenseTrackerService {
     //two things will change first universal object
     //second the csv file will add line to it
     public async AddTransactionToAnOldAccount(ammount: number, transactionType: string, transactionCategory: string, transactionDetails: string, transactionName: string, accountName: string) {
-        let jsonObject = await this.fetchJSONOrCSVFile(`${accountName}_${CONSTANTS.transctionObjectFileName}`, CONSTANTS.filePath, fileTypes.json);
+        let jsonObject = await this.fileUtility.fetchJSONOrCSVFile(`${accountName}_${CONSTANTS.transctionObjectFileName}`, CONSTANTS.filePath, fileTypes.json);
         // console.log(jsonObject)
         let oldOverview = ExpenseTrackerOverview.fromJson(jsonObject);
         // console.log(oldOverview);
@@ -37,7 +40,7 @@ export class ExpenseTrackerService {
         let oldAccountBalance = oldOverview.getaccountBalance();
         let oldRecordDate = oldOverview.getDateForTheRecord();
         //checking for currentmonth
-        let currentMonthFlag = await this.checkIsCurrentMonth(parseInt(oldRecordDate));
+        let currentMonthFlag = await this.utility.checkIsCurrentMonth(parseInt(oldRecordDate));
         oldOverview.SetDateForTheRecord((Date.now()).toString());
         if (transactionType == typeOfTransaction.expenditure) {
             oldOverview.setaccountBalance(/* (parseFloat( */oldAccountBalance/* ) */ - ammount/* s */);
@@ -63,22 +66,7 @@ export class ExpenseTrackerService {
         let responseToSaveTransaction = this.addTransactionToCSV(newTransactionRow, accountName);
         return appStatusCodes.success;
     }
-    public async checkIsCurrentMonth(timeStamp: number) {
-        let oldDate = new Date(timeStamp);
-        let oldMonth = oldDate.getMonth();
-        let oldYear = oldDate.getFullYear();
-        let oldDay = oldDate.getDate();
-        let currentDate = new Date(Date.now());
-        let currentMonth = currentDate.getMonth();
-        let currentYear = currentDate.getFullYear();
-        let currentDay = currentDate.getDate();
-        let flag = false;
-        // console.log('cy : ' + currentYear + " cM : " + currentMonth + " oldyear : " + oldYear + "oldmonth : " + oldMonth)
-        if (currentYear == oldYear && currentMonth == oldMonth && currentDay <= CONSTANTS.dayOfSalary) {
-            flag = true;
-        }
-        return flag;
-    }
+
     //add or update account
     public async AddAccountOrUpdateAccount(expenseDetailsOverview: ExpenseTrackerOverview, name: string) {
         // console.log(`${name}_${CONSTANTS.transctionObjectFileName}`, CONSTANTS.filePath, expenseDetailsOverview)
@@ -87,23 +75,25 @@ export class ExpenseTrackerService {
         return response;
     }
     // fetching file
-    public async fetchJSONOrCSVFile(fileName: string, filePath: string, fileType: string) {
-        let fileData: any;
-        if (fileType === fileTypes.csv) {
-            fileData = await this.fileSystemService.getCSVDataFromFile(filePath, fileName)
+
+    //this is just the csv transaction change 
+    // TODO : the csv changes should be done in this method
+    public async addTransactionToCSV(expeneseDetailsCsvRow: ExpeneseDetailsCsvRow, accountName: string) {
+        let currentTimeStamp: number = Date.now();
+        let currentDate: Date = new Date(currentTimeStamp);
+        let monthAndYearString: string;
+        if (await this.utility.checkIsCurrentMonth(currentTimeStamp)) {
+            monthAndYearString = this.utility.convertTheMonthFromNumberToSting(currentDate.getMonth()) + "-" + currentDate.getFullYear();
         }
         else {
-            fileData = await this.fileSystemService.getJsonFromFile(fileName, filePath);
+            monthAndYearString = this.utility.convertTheMonthFromNumberToSting(currentDate.getMonth() + 1) + "-" + currentDate.getFullYear();
         }
-        return fileData;
-    }
-    //
-    public async addTransactionToCSV(expeneseDetailsCsvRow: ExpeneseDetailsCsvRow, accountName: string) {
         let response: any;
-        let filename = `${accountName}_${CONSTANTS.csvFileName}`;
+        let filename = `${accountName}_${CONSTANTS.csvFileName}_${monthAndYearString}`;
         let filePath = CONSTANTS.filePath;
         if (await this.fileSystemService.checkFileExists(filename, filePath, fileTypes.csv)) {
-            let newRow = ['\n', expeneseDetailsCsvRow.getId(), ",", expeneseDetailsCsvRow.gettransactionName(), ",", expeneseDetailsCsvRow.getdetails(), ",", expeneseDetailsCsvRow.getammount(), ",", expeneseDetailsCsvRow.gettotalAccountBalance(), ",", expeneseDetailsCsvRow.getcategory(), ",", expeneseDetailsCsvRow.gettypeOfTransaction(), ",", expeneseDetailsCsvRow.getDateForTheTransaction()]
+            let newRow = ['\n', expeneseDetailsCsvRow.getId(), ",", expeneseDetailsCsvRow.gettransactionName(), ",", expeneseDetailsCsvRow.getdetails(), ",", expeneseDetailsCsvRow.getammount(), ",", expeneseDetailsCsvRow.gettotalAccountBalance(), ",", expeneseDetailsCsvRow.getcategory(), ",", expeneseDetailsCsvRow.gettypeOfTransaction(), ",", expeneseDetailsCsvRow.getDateForTheTransaction()];
+            // console.log(newRow);
             response = await this.fileSystemService.appendLineToFile(filename, filePath, newRow, fileTypes.csv);
             await this.logWritter.writeLogs("the Transaction is Added To Csv for id : " + expeneseDetailsCsvRow.getId(), filePrefix.transction);
             //console.log(`${accountName}:${CONSTANTS.csvFileName}`, CONSTANTS.filePath, newRow)

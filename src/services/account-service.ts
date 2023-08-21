@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { accountOperations, appStatusCodes, CONSTANTS, filePrefix, fileTypes, LentBorrowTransactionType, transactionCategory, typeOfTransaction } from "../constants/constants";
+import { accountOperations, appStatusCodes, CONSTANTS, filePrefix, fileTypes, LentBorrowTransactionType, loanStatus, transactionCategory, typeOfCreditCardTransaction, typeOfTransaction } from "../constants/constants";
 import { Account } from "../models/account";
 import TYPES from "../types";
 import { FileSystemService } from "./file-system-service";
@@ -12,6 +12,11 @@ import { LogWritter } from "../utility/logWritter";
 import { LentBorrowTransaction } from "../models/lentBorrowTransaction";
 import { LentBorrowTrackingService } from "./lentBorrow-tracking-service";
 import { LentBorrowTransactionCsvRow } from "../models/lentBorrowTransactionCsvRow";
+import { Loan } from "../models/loan";
+import { CreditCardOverviewObject } from "../models/credit-card-overview-object";
+import { CreditCardCsvRow } from "../models/credit-card-csv-row";
+import { CreditCardModuleService } from "./credit-card-module-service";
+import { CreditCardLoanManagementService } from "./credit-card-loan-management-service";
 
 
 @injectable()
@@ -22,8 +27,11 @@ export class AccountService {
     private readonly utility: Utility;
     private readonly logWritter: LogWritter;
     private readonly lentBorrowTransctionService: LentBorrowTrackingService;
-
-    constructor(@inject(TYPES.FileSystemService) _fileSystemService: FileSystemService, @inject(TYPES.ExpenseTrackerService) _expenseTrackerService: ExpenseTrackerService, @inject(TYPES.Utility) _utilty: Utility, @inject(TYPES.LogWritter) _logWritter: LogWritter, @inject(TYPES.LentBorrowTrackingService) _lentBorrowTransactionSetvice: LentBorrowTrackingService,) {
+    private readonly creditCardModuleService: CreditCardModuleService;
+    private readonly creditCardLoanManagementService: CreditCardLoanManagementService;
+    constructor(@inject(TYPES.FileSystemService) _fileSystemService: FileSystemService, @inject(TYPES.ExpenseTrackerService) _expenseTrackerService: ExpenseTrackerService, @inject(TYPES.Utility) _utilty: Utility, @inject(TYPES.LogWritter) _logWritter: LogWritter, @inject(TYPES.LentBorrowTrackingService) _lentBorrowTransactionSetvice: LentBorrowTrackingService, @inject(TYPES.CreditCardModuleService) _creditCardModuleService: CreditCardModuleService, @inject(TYPES.CreditCardLoanManagementService) _creditCaradLaonManagementSerevice: CreditCardLoanManagementService) {
+        this.creditCardLoanManagementService = _creditCaradLaonManagementSerevice;
+        this.creditCardModuleService = _creditCardModuleService;
         this.lentBorrowTransctionService = _lentBorrowTransactionSetvice;
         this.logWritter = _logWritter;
         this.utility = _utilty;
@@ -140,6 +148,12 @@ export class AccountService {
         // let lentBorrowTransactionCsvRow = new LentBorrowTransactionCsvRow(name, LentBorrowTransactionType.lent, 0, await this.utility.convertTimeStamp(Date.now()));
         // await this.lentBorrowTransctionService.addTransactionToLentBorrowCsv(name, lentBorrowTransactionCsvRow);
         await this.lentBorrowTransctionService.addOrUpdateLentBorrowAccount(name, 'initial transction', LentBorrowTransactionType.lent, 0, "first empty Transaction");
+        let loan = new Loan("", "", "", "", 0, 0, 0, 0, 0, "", [], loanStatus.cloased, "first empty loan", 0);
+        let creditCardOverviewFile = new CreditCardOverviewObject(name, 0, 0, 0, 0, Date.now(), 0, 0, 0);
+        let creditCardCsv = new CreditCardCsvRow(uuid(), "initial transacation", 0, 0, "first empty transaction", "", typeOfCreditCardTransaction.billPayed, 0, Date.now(), true);
+        await this.creditCardModuleService.addOrUpdateCardOverviewAccount(name, creditCardOverviewFile);
+        await this.creditCardModuleService.addTransactionToCSV(name, creditCardCsv);
+        await this.creditCardLoanManagementService.addLoanToTheFile(name, loan);
     }
     public async checkAccountIfExists() {
         const accountPath = CONSTANTS.filePath + CONSTANTS.accountPath;

@@ -1,4 +1,4 @@
-import "reflect-metadata";
+import "reflect-metadata"; 1
 import { DriverService } from "./services/driver-service";
 import * as readline from 'readline';
 import { ExpenseTrackerService } from "./services/expense-tracker-service";
@@ -16,19 +16,28 @@ import { ExpenseAppCLIService } from "./services/expense-app-cli-service";
 import { Account } from "./models/account";
 import { LentBorrowTrackingService } from "./services/lentBorrow-tracking-service";
 import { LentBorrowTrackingCLIService } from "./services/lentBorrow-tracking-CLI-service";
-let driverService = new DriverService();
-
+import { FileUtility } from "./utility/fileUtility";
+import { CreditCardLoanCli } from "./services/credit-card-loan-cli-service";
+import { CreditCardModuleService } from "./services/credit-card-module-service";
+import { CreditCardLoanManagementService } from "./services/credit-card-loan-management-service";
+import { CreditCardCLIService } from "./services/credit-card-modul-cli-service";
+let fsClient = new FSClient();
+let utility = new Utility("started");
+let logWritter = new LogWritter(fsClient, utility);
+let driverService = new DriverService(utility);
 let readLine = driverService.takeInput(readline);
 let prompt = driverService.createPrompt(readLine);
-let fsClient = new FSClient();
-let utility = new Utility();
-let logWritter = new LogWritter(fsClient, utility);
 let fileSystemService = new FileSystemService(fsClient, logWritter);
-let expense = new ExpenseTrackerService(fileSystemService, logWritter, utility);
+let fileUtility = new FileUtility(fileSystemService)
+let expense = new ExpenseTrackerService(fileSystemService, logWritter, utility, fileUtility);
 let lentBorrow = new LentBorrowTrackingService(fileSystemService, logWritter, utility);
 let lentBorrowCLI = new LentBorrowTrackingCLIService(lentBorrow);
-let account = new AccountService(fileSystemService, expense, utility, logWritter, lentBorrow);
-let erxpenseappclientsvc = new ExpenseAppCLIService(account, driverService, expense, utility, lentBorrowCLI);
+let creditCardModuleService = new CreditCardModuleService(fileSystemService, logWritter, fileUtility, utility);
+let creditCardLoanService = new CreditCardLoanManagementService(fileSystemService, logWritter, fileUtility, utility);
+let creditCardLoanCli = new CreditCardLoanCli(utility, creditCardModuleService, creditCardLoanService, fileUtility);
+let creditCardCli = new CreditCardCLIService(utility, creditCardModuleService, creditCardLoanService, fileUtility, creditCardLoanCli);
+let account = new AccountService(fileSystemService, expense, utility, logWritter, lentBorrow, creditCardModuleService, creditCardLoanService);
+let erxpenseappclientsvc = new ExpenseAppCLIService(account, driverService, expense, utility, lentBorrowCLI, creditCardCli);
 let common = new CommonService(account, driverService, erxpenseappclientsvc);
 let printName = async () => {
     // let response = await expense.AddTransactionToAnOldAccount(1000, typeOfTransaction.income, transactionCategory.other, "test transacton", "testing", 'shubham')

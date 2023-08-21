@@ -95,7 +95,7 @@ export class LentBorrowTrackingService {
         let filePath = CONSTANTS.filePath;
         if (await this.fileSystemService.checkFileExists(fileName, filePath, fileTypes.csv)) {
             //let fileData = new LentBorrowTransaction(accountName, type, ammount);
-            let newRow = ['\n', lentBorrowDetailsSingle.getname(), ", ", lentBorrowDetailsSingle.gettype(), ", ", lentBorrowDetailsSingle.getammount().toString(), ", ", lentBorrowDetailsSingle.getdate()]
+            let newRow = ['\n', lentBorrowDetailsSingle.getname(), ", ", lentBorrowDetailsSingle.gettype(), ", ", lentBorrowDetailsSingle.getammount().toString(), ", ", lentBorrowDetailsSingle.getdate(), ", ", lentBorrowDetailsSingle.getdetails()]
             // console.log(newRow)
             await this.fileSystemService.appendLineToFile(fileName, filePath, newRow, fileTypes.csv);
         } else {

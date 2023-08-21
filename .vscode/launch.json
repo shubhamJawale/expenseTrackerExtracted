@@ -11,10 +11,12 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\src\\services\\expense-tracker-service.ts",
+            "program": "${workspaceFolder}\\src\\index.ts",
             "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "console": "integratedTerminal",
         }
     ]
 }

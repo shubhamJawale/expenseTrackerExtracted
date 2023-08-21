@@ -38,8 +38,7 @@ export class LentBorrowTrackingCLIService {
             selectedType = LentBorrowTransactionType.borrow;
         }
         // console.log(ammount);
-
-        let details = await rl.question('Enter the Transaction Details');
+        let details = await rl.question('Enter the Transaction Details : ');
         let response = await this.lentBorrowTrackingService.addOrUpdateLentBorrowAccount(name, transaction.getname(), selectedType, parseInt(ammount), details);
     }
 

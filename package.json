@@ -5,7 +5,9 @@
   "main": "/dist/index.js",
   "scripts": {
     "test": "npm run test",
-    "start": "tsc && node ./dist/index.js"
+    "start:app": "tsc && ts-node ./src/index.ts",
+    "start": "nodemon",
+    "build": "tsc --watch --preserveWatchOutput"
   },
   "keywords": [
     "file",
@@ -30,6 +32,7 @@
     "nodemon": "^2.0.22",
     "objects-to-csv": "^1.3.6",
     "reflect-metadata": "^0.1.13",
+    "ts-node": "^10.9.1",
     "uuid": "^9.0.0"
   }
 }
