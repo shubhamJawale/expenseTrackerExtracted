@@ -111,7 +111,7 @@ export class CreditCardCLIService {
         loanArray.forEach((loan: Loan) => {
             if (loan.getLoanStatus() === loanStatus.active) {
                 let tennure = loan.getSpacificTenure(monthString, date.getFullYear().toString());
-                if (tennure.getIndexOfTenure() !== -1) {
+                if (typeof (tennure) === "object" && tennure.getPeriodOfTenure() != "" && tennure.getStatusOfTheTenure() === tenureStatus.pending) {
                     totalTenureBill = totalTenureBill + tennure.getAmmountOfTenure();
                 }
             }

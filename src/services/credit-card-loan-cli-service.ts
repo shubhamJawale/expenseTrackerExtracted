@@ -162,9 +162,14 @@ export class CreditCardLoanCli {
 
     // update currunt month tenure 
     private async updateTheCurrentMonthTenure(rl: any, accountHolderName: string, loan: Loan) {
-        let getCurrentMonthTenureStringDetails = this.getCurrentMonthTenure();
-        let currentTenure = loan.getSpacificTenure(getCurrentMonthTenureStringDetails.month, getCurrentMonthTenureStringDetails.year.toString());
-        if (typeof (currentTenure) != "string") {
+        // this will take last months tenure example if it sep and the bill is on 21-aug so it will consider that as the current months tenure
+        let currentTimeStamp = Date.now();
+        let currentDate = new Date(currentTimeStamp);
+        let monthString = this.utility.convertTheMonthFromNumberToSting(currentDate.getMonth() - 1)
+        // let getCurrentMonthTenureStringDetails = this.getCurrentMonthTenure();
+        let currentTenure = loan.getSpacificTenure(monthString, currentDate.getFullYear().toString());
+        // let currentTenure = loan.getSpacificTenure(getCurrentMonthTenureStringDetails.month, getCurrentMonthTenureStringDetails.year.toString());
+        if (typeof (currentTenure) != "string" && currentTenure.getPeriodOfTenure() != "" && currentTenure.getStatusOfTheTenure() != tenureStatus.paid) {
             let tenureStatusString = await rl.question('enter the status \n 1. paid \n 2. paid by me but borrower pending \n :=> ');
             let status = tenureStatus.pending;
             parseInt(tenureStatusString) === 1 ? tenureStatus.paid : tenureStatus.pendingFromBorrower;
