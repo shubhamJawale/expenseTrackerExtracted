@@ -107,7 +107,12 @@ export class CreditCardCLIService {
         let timpeStamp = Date.now();
         let date = new Date(timpeStamp);
         let month = date.getMonth();
-        let monthString = this.utility.convertTheMonthFromNumberToSting(month);
+        let monthString: string;
+        if (date.getDate() <= 10) {
+            monthString = this.utility.convertTheMonthFromNumberToSting(month - 1);
+        } else {
+            monthString = this.utility.convertTheMonthFromNumberToSting(month)
+        }
         loanArray.forEach((loan: Loan) => {
             if (loan.getLoanStatus() === loanStatus.active) {
                 let tennure = loan.getSpacificTenure(monthString, date.getFullYear().toString());
